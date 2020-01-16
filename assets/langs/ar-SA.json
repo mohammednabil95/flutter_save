@@ -1,0 +1,67 @@
+{
+  "Prayer Times": "أوقات الصلاة",
+
+  "Next prayer" : "الصلاة القادمة",
+
+  "Arabic": "عربي",
+
+
+  "Home"    : "الرئيسية",
+  "Calendar": "التقويم",
+  "Map"     : "الخريطة",
+  "Qibla"   : "القبلة",
+
+  "Fajr" : "الفجر",
+  "Dhuhr" : "الظهر",
+  "Asr" : "العصر",
+  "Maghrib": "المغرب",
+  "Isha" : "العشاء",
+
+  "Select date" : "اختر التاريخ",
+  "Change date" : "اختر التاريخ",
+
+  "Hijri" : "هجري",
+  "Gregorian" : "ميلادي",
+
+  "Mosques" : "المساجد",
+
+  "Nearest Mosques" : "المساجد القريبة",
+
+  "Language": "اللغة",
+  "About": "عن التطبيق",
+
+  "Select Language": "اختر اللغة",
+
+  "Salah Times": "اوقات الصلاة",
+
+  "OK": "موافق",
+
+  "AboutText": "تطبيق صلوات - 2019",
+
+  "Location:": "المكان:",
+  "Hijri:": "هجري:",
+  "Gregorian:": "ميلادي:",
+  "Refresh": "تحديث",
+
+  "Prayer Methods": "طريقة الحساب",
+
+  "Settings": "الإعدادات",
+  "Save": "حفظ",
+
+
+  "Umm Al-Qura University, Makkah": "جامعة أم القرى",
+  "Ithna-Ashari": "اثنا عشري",
+  "University of Islamic Sciences, Karachi": "جامعة العلوم الإسلامية، كراتشي",
+  "Islamic Society of North America": "الجمعية الإسلامية لأمريكا الشمالية",
+  "Muslim World League": "رابطة العالم الإسلامي",
+  "Egyptian General Authority of Survey": "الهيئة المصرية العامة للمساحة",
+  "Institute of Geophysics, University of Tehran": "معهد الجيوفيزياء ، جامعة طهران",
+  "Gulf Region": "منطقة الخليج",
+  "Kuwait": "الكويت",
+  "Qatar": "قطر",
+  "Majlis Ugama Islam Singapura, Singapore": "مجلس سنغافورة الإسلامي",
+  "Union Organization islamic de France": "منظمة الاتحاد الإسلامي في فرنسا",
+  "Diyanet İşleri Başkanlığı, Turkey": "رئاسة الشؤون الدينية، تركيا",
+  "Spiritual Administration of Muslims of Russia": "الإدارة الدينية لمسلمي روسيا"
+
+}

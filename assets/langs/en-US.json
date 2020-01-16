@@ -1,0 +1,64 @@
+{
+  "Prayer Times" : "Prayer Times",
+
+  "Next prayer" : "Next Prayer",
+
+  "Arabic": "عربي",
+
+
+  "Home"    : "Home",
+  "Calendar": "Calendar",
+  "Map"     : "Map",
+  "Qibla"   : "Qibla",
+
+  "Fajr"   : "Fajr",
+  "Dhuhr"  : "Dhuhr",
+  "Asr"    : "Asr",
+  "Maghrib": "Maghrib",
+  "Isha"   : "Isha",
+
+  "Select date" : "Select date",
+  "Change date" : "Change date",
+
+  "Hijri" : "Hijri",
+  "Gregorian" : "Gregorian",
+
+  "Mosques" : "Mosques",
+
+  "Nearest Mosques" : "Nearest Mosques",
+
+  "Language": "Language",
+  "About": "About",
+
+  "Select Language": "Select Language",
+
+  "Salah Times": "Salah Times",
+
+  "OK": "OK",
+
+  "AboutText": "Salawat App 2019\n ",
+
+  "Location:": "Location:",
+  "Hijri:": "Hijri:",
+  "Gregorian:": "Gregorian:",
+
+  "Prayer Methods": "Prayer Methods",
+
+  "Settings": "Settings",
+  "Save": "Save",
+
+  "Umm Al-Qura University, Makkah": "Umm Al-Qura University, Makkah",
+  "Ithna-Ashari": "Ithna-Ashari",
+  "University of Islamic Sciences, Karachi": "University of Islamic Sciences, Karachi",
+  "Islamic Society of North America": "Islamic Society of North America",
+  "Muslim World League": "Muslim World League",
+  "Egyptian General Authority of Survey": "Egyptian General Authority of Survey",
+  "Institute of Geophysics, University of Tehran": "Institute of Geophysics, University of Tehran",
+  "Gulf Region": "Gulf Region",
+  "Kuwait": "Kuwait",
+  "Qatar": "Qatar",
+  "Majlis Ugama Islam Singapura, Singapore": "Majlis Ugama Islam Singapura, Singapore",
+  "Union Organization islamic de France": "Union Organization islamic de France",
+  "Diyanet İşleri Başkanlığı, Turkey": "Diyanet İşleri Başkanlığı, Turkey",
+  "Spiritual Administration of Muslims of Russia": "Spiritual Administration of Muslims of Russia"
+}
