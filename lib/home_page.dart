@@ -8,11 +8,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:prayer_bloc/notificationbloc/bloc.dart';
 import 'package:prayer_bloc/notificationbloc/notification_bloc.dart';
 import 'package:prayer_bloc/notificationbloc/notification_state.dart';
-import 'package:prayer_bloc/repository/options_repository.dart';
-import 'package:prayer_bloc/repository/prayer_repository.dart';
-import 'package:prayer_bloc/settings_page.dart';
-
-import 'bloc/options_bloc.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -69,8 +64,6 @@ class _HomePageState extends State<HomePage> {
           children: <Widget>[
             Container(
               color: Colors.white,
-              width: 130.0,
-              height: 250.0,
               child: BlocListener<NotificationBloc, NotificationState>(
                 listener: (context, state) {
                 },
@@ -78,7 +71,9 @@ class _HomePageState extends State<HomePage> {
                   builder: (context, state) {
                     if (state is NotificationLoadedState) {
                       return NotificationIconBuild();
-                    }
+                    }else {
+                      return buildLoading();
+                  }
                   },
                 ),
               ),
