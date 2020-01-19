@@ -2,7 +2,6 @@ import 'package:prayer_bloc/bloc/prayer_bloc.dart';
 import 'package:prayer_bloc/bloc/prayer_event.dart';
 import 'package:prayer_bloc/bloc/prayer_state.dart';
 import 'package:prayer_bloc/models/AthanTimes.dart';
-//import 'package:prayer_bloc/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -80,19 +79,17 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildArticleList(Timings item) {
         return new Container(
+
           child: new Center(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                new Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new Container(
-                      child: Column(
+            child: new Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Column(
                         children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(top: 10.0),
-                          ),
+
                           Row(
                             children: <Widget>[
                               Text("Fajr"),
@@ -100,10 +97,7 @@ class _HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.only(left: 50.0),
                               ),
                               Text(item.fajr),
-                              IconButton(
-                                icon: Icon(Icons.notifications),
-                                onPressed: () {},
-                              )
+
                             ],
                           ),
                           Padding(
@@ -116,12 +110,7 @@ class _HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.only(left: 30.0),
                               ),
                               Text(item.dhuhr),
-                              IconButton(
-                                icon: Icon(Icons.notifications),
-                                onPressed: () {
 
-                                },
-                              )
                             ],
                           ),
                           Padding(
@@ -140,28 +129,7 @@ class _HomePageState extends State<HomePage> {
                               //api2=api,
 
                               //Text(data),
-                              IconButton(
-                                icon: Icon(Icons.notifications),
-                                onPressed: () {
-                                  //_showSnackBar();
-                                  List<String> arr = item.asr.split(':');
-                                  int aa = int.parse(arr[0]);
-                                  //int bb = int.parse(arr[1]);
-                                  print(aa);
 
-                                  //print(num[1]);
-
-
-                                  //asrnotification();
-                                  var time = new Time(aa, 40, 0);
-                                  var android = new AndroidNotificationDetails(
-                                      'Channel Id', 'Channel Name', 'Channel Des',);
-                                  var iOS = new IOSNotificationDetails();
-                                  var platform = new NotificationDetails(android, iOS);
-                                  flutterLocalNotificationsPlugin.showDailyAtTime(0, 'show daily title',
-                                      'Daily notification shown at approximately', time, platform);
-                                },
-                              )
                             ],
                           ),
                           Padding(
@@ -174,10 +142,7 @@ class _HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.only(left: 25.0),
                               ),
                               Text(item.maghrib),
-                              IconButton(
-                                icon: Icon(Icons.notifications),
-                                onPressed: () {},
-                              )
+
                             ],
                           ),
                           Padding(
@@ -190,34 +155,61 @@ class _HomePageState extends State<HomePage> {
                                 padding: EdgeInsets.only(left: 50.0),
                               ),
                               Text(item.isha),
-                              IconButton(
-                                icon: Icon(Icons.notifications),
-                                onPressed: () {},
-                              )
                             ],
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 10.0),
                           ),
-//                          Builder(
-//                            builder: (context)=>
-//                                RaisedButton(
-//                                  onPressed: (){
-//                                    Navigator.push(
-//                                      context,
-//                                      MaterialPageRoute(builder: (context) => SettingsPage()),
-//                                    );
-//                                  },
-//                                ),
-//                          )
+
                         ],
                       ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+                    Notification()
+                  ],
+                ),
+                ),
+              ),
           ),
         );
+  }
+}
+
+class Notification extends StatefulWidget {
+  const Notification({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _NotificationState createState() => _NotificationState();
+}
+
+class _NotificationState extends State<Notification> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        IconButton(
+          icon: Icon(Icons.notifications),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.notifications),
+          onPressed: () {
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.notifications),
+          onPressed: () {
+          }
+        ),
+        IconButton(
+          icon: Icon(Icons.notifications),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: Icon(Icons.notifications),
+          onPressed: () {},
+        )
+      ],
+    );
   }
 }
