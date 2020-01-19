@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+
     super.initState();
     notificationBloc=BlocProvider.of<NotificationBloc>(context);
     prayerBloc = BlocProvider.of<PrayerBloc>(context);
