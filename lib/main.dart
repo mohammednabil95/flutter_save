@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:prayer_bloc/bloc/prayer_bloc.dart';
 import 'package:prayer_bloc/home_page.dart';
+import 'package:prayer_bloc/notificationbloc/bloc.dart';
 import 'package:prayer_bloc/repository/options_repository.dart';
 import 'package:prayer_bloc/repository/prayer_repository.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
                 BlocProvider<PrayerBloc>(
                 create: (BuildContext context) => PrayerBloc(repository: PrayerRepositoryImpl()),
                 ),
+                BlocProvider<NotificationBloc>(
+                  create: (BuildContext context)=>NotificationBloc(),
+                )
 //                BlocProvider<OptionsBloc>(
 //                create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
 //                ),

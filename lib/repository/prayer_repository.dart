@@ -60,6 +60,7 @@ class PrayerRepositoryImpl implements PrayerRepository {
         }
       }
       Timings timings = item[arrayLocation].timings;
+
       return timings;
 
   }

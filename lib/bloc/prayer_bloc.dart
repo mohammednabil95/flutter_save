@@ -18,7 +18,7 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
   Stream<PrayerState> mapEventToState(
     PrayerEvent event,
   ) async* {
-    if (event is FetchPrayerEvent) {
+    if (event is FetchPrayerEvent ) {
       try {
         Timings item = await repository.getItem();
         yield PrayerLoadedState(item: item);

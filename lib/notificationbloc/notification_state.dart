@@ -12,12 +12,8 @@ class InitialNotificationState extends NotificationState {
 }
 
 class NotificationLoadedState extends NotificationState {
-
-  Timings item;
-
-  NotificationLoadedState({@required this.item});
-
   @override
   // TODO: implement props
-  List<Object> get props => [item];
+  List<Object> get props => null;
+
 }

@@ -24,6 +24,7 @@ class PrayerLoadedState extends PrayerState {
   List<Object> get props => [item];
 }
 
+
 class PrayerErrorState extends PrayerState {
 
   String message1;

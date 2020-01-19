@@ -10,6 +10,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> mapEventToState(
     NotificationEvent event,
   ) async* {
-    // TODO: Add Logic
+    if(event is FetchNotificationEvent){
+      yield NotificationLoadedState();
+    }
   }
 }
