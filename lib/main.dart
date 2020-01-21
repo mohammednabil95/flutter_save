@@ -10,6 +10,7 @@ import 'package:prayer_bloc/repository/prayer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:prayer_bloc/screens/map_screen.dart';
+import 'package:prayer_bloc/screens/qibla_screen.dart';
 import 'package:prayer_bloc/settings_page.dart';
 
 import 'bloc/options_bloc.dart';
@@ -75,8 +76,8 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
     HomePage(),
     //TimesScreen(),
     //PrayerTimes(),
-    MapsScreen()
-    //QiblaScreen(),
+    MapsScreen(),
+    QiblaScreen(),
   ];
 
   void onTabTapped(int index) {
@@ -201,10 +202,10 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
                         icon: new Icon(Icons.map),
                         title: Text(AppLocalizations.of(context).tr('Mosques')),
                       ),
-//                    BottomNavigationBarItem(
-//                      icon: new Icon(Icons.navigation),
-//                      title: Text(AppLocalizations.of(context).tr('Qibla')),
-//                    ),
+                    BottomNavigationBarItem(
+                      icon: new Icon(Icons.navigation),
+                      title: Text(AppLocalizations.of(context).tr('Qibla')),
+                    ),
                   ],
                 ),
               ),
