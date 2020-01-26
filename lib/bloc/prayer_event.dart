@@ -8,17 +8,7 @@ class FetchPrayerEvent extends PrayerEvent {
   List<Object> get props => null;
 }
 
-class SelectNotificationEvent extends PrayerEvent {
-  @override
-  // TODO: implement props
-  List<Object> get props => null;
-}
 
-class UnSelectNotificationEvent extends PrayerEvent {
-  @override
-  // TODO: implement props
-  List<Object> get props => null;
-}
 
 //class FetchPrayerEventWithMethod extends PrayerEvent {
 //

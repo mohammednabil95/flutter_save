@@ -1,9 +1,9 @@
-import 'package:prayer_bloc/bloc/bloc.dart';
-import 'package:prayer_bloc/home_page.dart';
+import 'package:flutter_save/bloc/bloc.dart';
+import 'package:flutter_save/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:prayer_bloc/models/Options.dart';
-import 'package:prayer_bloc/repository/options_repository.dart';
+import 'package:flutter_save/models/Options.dart';
+import 'package:flutter_save/repository/options_repository.dart';
 
 class ParentSettingsPage extends StatelessWidget {
   @override

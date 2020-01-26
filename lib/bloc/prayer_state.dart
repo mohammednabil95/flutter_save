@@ -1,5 +1,5 @@
 
-import 'package:prayer_bloc/models/AthanTimes.dart';
+import 'package:flutter_save/models/AthanTimes.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 

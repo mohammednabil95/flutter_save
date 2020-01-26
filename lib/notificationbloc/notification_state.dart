@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
-import 'package:prayer_bloc/models/AthanTimes.dart';
+import 'package:flutter_save/models/AthanTimes.dart';
 import 'package:meta/meta.dart';
+import 'package:flutter_save/models/notification1.dart';
 
 abstract class NotificationState extends Equatable {
   const NotificationState();
@@ -12,8 +13,22 @@ class InitialNotificationState extends NotificationState {
 }
 
 class NotificationLoadedState extends NotificationState {
+
+  NotificationModle notification;
+  NotificationLoadedState({@required this.notification});
+
   @override
   // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [notification];
+}
 
+class NotificationErrorState extends NotificationState {
+
+  String message1;
+  var bib;
+  NotificationErrorState({@required this.message1});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [message1];
 }

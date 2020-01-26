@@ -3,14 +3,14 @@
 import 'dart:math';
 
 import 'package:geolocator/geolocator.dart';
-import 'package:prayer_bloc/models/AthanTimes.dart';
+import 'package:flutter_save/models/AthanTimes.dart';
 
 import 'package:http/http.dart' as http;
-import 'package:prayer_bloc/models/Options.dart';
+import 'package:flutter_save/models/Options.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:prayer_bloc/utilities/file_util.dart';
+import 'package:flutter_save/utilities/file_util.dart';
 
 abstract class OptionsRepository {
   Future<Options> getOptions();

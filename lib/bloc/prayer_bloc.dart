@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:prayer_bloc/models/AthanTimes.dart';
+import 'package:flutter_save/models/AthanTimes.dart';
 
-import 'package:prayer_bloc/repository/prayer_repository.dart';
+import 'package:flutter_save/repository/prayer_repository.dart';
 import './bloc.dart';
 import 'package:meta/meta.dart';
 

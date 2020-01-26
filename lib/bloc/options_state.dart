@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:prayer_bloc/models/Options.dart';
+import 'package:flutter_save/models/Options.dart';
 import 'package:meta/meta.dart';
 
 abstract class OptionsState extends Equatable {

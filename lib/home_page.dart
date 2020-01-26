@@ -1,13 +1,15 @@
-import 'package:prayer_bloc/bloc/prayer_bloc.dart';
-import 'package:prayer_bloc/bloc/prayer_event.dart';
-import 'package:prayer_bloc/bloc/prayer_state.dart';
-import 'package:prayer_bloc/models/AthanTimes.dart';
+import 'package:flutter_save/bloc/prayer_bloc.dart';
+import 'package:flutter_save/bloc/prayer_event.dart';
+import 'package:flutter_save/bloc/prayer_state.dart';
+import 'package:flutter_save/models/AthanTimes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:prayer_bloc/notificationbloc/bloc.dart';
-import 'package:prayer_bloc/notificationbloc/notification_bloc.dart';
-import 'package:prayer_bloc/notificationbloc/notification_state.dart';
+import 'package:flutter_save/notificationbloc/bloc.dart';
+import 'package:flutter_save/notificationbloc/notification_bloc.dart';
+import 'package:flutter_save/notificationbloc/notification_state.dart';
+import 'package:flutter_save/models/notification1.dart';
+
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,13 +19,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   PrayerBloc prayerBloc;
   NotificationBloc notificationBloc;
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
 
     super.initState();
-    notificationBloc=BlocProvider.of<NotificationBloc>(context);
+    notificationBloc = BlocProvider.of<NotificationBloc>(context);
     prayerBloc = BlocProvider.of<PrayerBloc>(context);
     prayerBloc.add(FetchPrayerEvent());
     notificationBloc.add(FetchNotificationEvent());
@@ -64,17 +65,23 @@ class _HomePageState extends State<HomePage> {
         Column(
           children: <Widget>[
             Container(
+              height: 500,
+              width: 200,
               color: Colors.white,
               child: BlocListener<NotificationBloc, NotificationState>(
                 listener: (context, state) {
                 },
                 child: BlocBuilder<NotificationBloc, NotificationState>(
                   builder: (context, state) {
-                    if (state is NotificationLoadedState) {
-                      return NotificationIconBuild();
-                    }else {
+                    if(state is InitialNotificationState) {
                       return buildLoading();
-                  }
+                    }
+                    else if (state is NotificationLoadedState) {
+                      return NotificationIconBuild(state.notification);
+                    }
+                    else if(state is NotificationErrorState) {
+                      return buildErrorUi(state.message1);
+                    }
                   },
                 ),
               ),
@@ -186,30 +193,100 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget NotificationIconBuild() {
+  Widget NotificationIconBuild(NotificationModle notification) {
     return Column(
       children: <Widget>[
-        IconButton(
-          icon: Icon(Icons.notifications),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.notifications),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.notifications),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.notifications),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: Icon(Icons.notifications),
-          onPressed: () {},
-        ),
+        notificationIcon("fajr", notification),
+        notificationIcon("duhur", notification),
+        notificationIcon("asr", notification),
+        notificationIcon("magrib", notification),
+        notificationIcon("esha", notification),
       ],
     );
   }
+
+  Widget notificationIcon(String notification, NotificationModle notificationModle){
+    switch(notification) {
+      case "fajr": {
+        if(notificationModle.fajr == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.fajr = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.duhur = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+      case "duhur": {
+        if(notificationModle.fajr == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.duhur = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.duhur = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+      case "asr": {
+        if(notificationModle.fajr == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.duhur = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.duhur = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+      case "esha": {
+        if(notificationModle.fajr == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.duhur = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.duhur = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+
+      default: {
+        //statements;
+      }
+      break;
+    }
+
+  }
+
+
 }
