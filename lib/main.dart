@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_save/bloc/prayer_bloc.dart';
 import 'package:flutter_save/home_page.dart';
 import 'package:flutter_save/notificationbloc/bloc.dart';
+import 'package:flutter_save/repository/notifications_repository.dart';
 import 'package:flutter_save/repository/options_repository.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
                 create: (BuildContext context) => PrayerBloc(repository: PrayerRepositoryImpl()),
                 ),
                 BlocProvider<NotificationBloc>(
-                  create: (BuildContext context)=>NotificationBloc(),
+                  create: (BuildContext context)=>NotificationBloc(notificationsRepository: NotificationsRepositoryImp()),
                 )
 //                BlocProvider<OptionsBloc>(
 //                create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
@@ -67,7 +68,6 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
   // Create a tab controller
   TabController controller;
-
   int lang;
 
 
@@ -217,6 +217,4 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
       ),
     );
   }
-
-
 }

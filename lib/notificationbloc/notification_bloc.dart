@@ -17,7 +17,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> mapEventToState(
     NotificationEvent event,
   ) async* {
-
     if(event is FetchNotificationEvent){
       try {
         NotificationModle notification = await notificationsRepository.getNotifications();
