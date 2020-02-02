@@ -1,4 +1,3 @@
-
 import 'package:flutter_save/models/notification1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -8,8 +7,6 @@ abstract class NotificationsRepository {
 }
 
 class NotificationsRepositoryImp implements NotificationsRepository {
-
-
 
   @override
   Future<NotificationModle> getNotifications() async {

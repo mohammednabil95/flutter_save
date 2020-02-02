@@ -16,7 +16,6 @@ import 'package:hijri/umm_alqura_calendar.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:flutter_save/repository/my_flutter_app_icons.dart';
 import 'package:intl/intl.dart';
-
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -270,7 +269,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.only(left: 60.0),
                     ),
-                    Text(item.fajr,style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
+                    Text(formatTime(item.fajr),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 Padding(
@@ -282,7 +281,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.only(left: 40.0),
                     ),
-                    Text(item.dhuhr,style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
+                    Text(formatTime(item.dhuhr),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 Padding(
@@ -294,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.only(left: 60.0),
                     ),
-                    Text(item.asr,style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
+                    Text(formatTime(item.asr),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 Padding(
@@ -306,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.only(left: 20.0),
                     ),
-                    Text(item.maghrib,style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
+                    Text(formatTime(item.maghrib),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 Padding(
@@ -318,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                     Padding(
                       padding: EdgeInsets.only(left: 55.0),
                     ),
-                    Text(item.isha,style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
+                    Text(formatTime(item.isha),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
                   ],
                 ),
                 Padding(
@@ -345,124 +344,105 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget notificationIcon(
-      String notification, NotificationModle notificationModle) {
-    switch (notification) {
-      case "fajr":
-        {
-          if (notificationModle.fajr == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                notificationModle.fajr = true;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-          else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
-              onPressed: () {
-                notificationModle.fajr = false;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-        }
-        break;
-      case "duhur":
-        {
-          if (notificationModle.duhur == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                notificationModle.duhur = true;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-          else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
-              onPressed: () {
-                notificationModle.duhur = false;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-        }
-        break;
-      case "asr":
-        {
-          if (notificationModle.asr == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                notificationModle.asr = true;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-          else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
-              onPressed: () {
-                notificationModle.asr = false;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-        }
-        break;
-      case "magrib":
-        {
-          if (notificationModle.magrib == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                notificationModle.magrib = true;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-          else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
-              onPressed: () {
-                notificationModle.magrib = false;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-        }
-        break;
-      case "esha":
-        {
-          if (notificationModle.esha == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
-              onPressed: () {
-                notificationModle.esha = true;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-          else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
-              onPressed: () {
-                notificationModle.esha = false;
-                notificationBloc
-                    .add(SelectNotificationEvent(notificationModle));
-              },
-            );
-        }
-        break;
-      default:
-        {
-          //statements;
-        }
-        break;
+  Widget notificationIcon(String notification, NotificationModle notificationModle){
+    switch(notification) {
+      case "fajr": {
+        if(notificationModle.fajr == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.fajr = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.fajr = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+      case "duhur": {
+        if(notificationModle.duhur == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.duhur = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.duhur = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+      case "asr": {
+        if(notificationModle.asr == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.asr = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.asr = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+
+      case "magrib": {
+        if(notificationModle.magrib == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.magrib = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.magrib = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+
+      case "esha": {
+        if(notificationModle.esha == false)
+          return IconButton(
+            icon: Icon(Icons.notifications),
+            onPressed: (){
+              notificationModle.esha = true;
+              notificationBloc.add(SelectNotificationEvent(notificationModle));
+            },
+          );
+        else return IconButton(
+          icon: Icon(Icons.notifications_active),
+          onPressed: (){
+            notificationModle.esha = false;
+            notificationBloc.add(SelectNotificationEvent(notificationModle));
+          },
+        );
+      }
+      break;
+
+      default: {
+        //statements;
+      }
+      break;
     }
   }
 
@@ -559,4 +539,34 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
+
+  String formatTime(String time){
+    List<String> timeData= to12Hour(time);
+    String formattedTime = timeData[0];
+    Localizations.localeOf(context).languageCode == "ar"
+        ? formattedTime = formattedTime + timeData[2]
+        : formattedTime = formattedTime + timeData[1];
+
+    return formattedTime;
+  }
+
+  List<String> to12Hour(String time){
+    List<String> time12hour = new List<String>();
+    String noon = " AM";
+    String noonAr = " ص";
+    int hour = int.parse(time.substring(0,2));
+    if (hour >= 12) {
+      hour = hour - 12;
+      noon = " PM";
+      noonAr = " م";
+    }
+    if (hour == 0) {
+      hour = 12;
+    }
+    time12hour.add(hour.toString() + time.substring(2,5));
+    time12hour.add(noon);
+    time12hour.add(noonAr);
+    return time12hour;
+  }
+
 }

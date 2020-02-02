@@ -10,6 +10,7 @@ import 'package:flutter_save/repository/options_repository.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_save/screens/calendar_screen.dart';
 import 'package:flutter_save/screens/map_screen.dart';
 import 'package:flutter_save/screens/qibla_screen.dart';
 import 'package:flutter_save/settings_page.dart';
@@ -75,7 +76,7 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
   final List<Widget> _children = [
     HomePage(),
     //TimesScreen(),
-    //PrayerTimes(),
+    ParentCalendarPage(),
     MapsScreen(),
     QiblaScreen(),
   ];
@@ -194,10 +195,10 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
                       icon: new Icon(Icons.home),
                       title: Text(AppLocalizations.of(context).tr('Home')),
                     ),
-//                    BottomNavigationBarItem(
-//                      icon: new Icon(Icons.calendar_today),
-//                      title: Text(AppLocalizations.of(context).tr('Calendar')),
-//                    ),
+                    BottomNavigationBarItem(
+                      icon: new Icon(Icons.calendar_today),
+                      title: Text(AppLocalizations.of(context).tr('Calendar')),
+                    ),
                      BottomNavigationBarItem(
                         icon: new Icon(Icons.map),
                         title: Text(AppLocalizations.of(context).tr('Mosques')),

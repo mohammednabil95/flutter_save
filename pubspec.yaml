@@ -1,4 +1,4 @@
-name: prayer_bloc
+name: flutter_save
 description: A new Flutter application.
 
 # The following defines the version and build number for your application.
@@ -34,6 +34,7 @@ dependencies:
   google_maps_flutter: ^0.5.7
   google_maps_webservice: ^0.0.13
   flutter_compass: ^0.2.0
+
   align_positioned: ^1.0.7
   flutter_calendar: ^0.0.1
   intl: ^0.16.0
@@ -77,22 +78,7 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
-  # To add custom fonts to your application, add a fonts section here,
-  # in this "flutter" section. Each entry in this list should have a
-  # "family" key with the font family name, and a "fonts" key with a
-  # list giving the asset and other descriptors for the font. For
-  # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
+  fonts:
+    - family:  MyFlutterApp
+      fonts:
+        - asset: assets/fonts/MyFlutterApp.ttf
