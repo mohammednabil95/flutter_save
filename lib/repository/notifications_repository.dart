@@ -9,10 +9,11 @@ abstract class NotificationsRepository {
 
 class NotificationsRepositoryImp implements NotificationsRepository {
 
-  NotificationModle notification;
+
 
   @override
   Future<NotificationModle> getNotifications() async {
+    NotificationModle notification=NotificationModle(false,false,false,false,false);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
