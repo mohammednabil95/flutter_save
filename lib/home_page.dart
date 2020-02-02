@@ -1,20 +1,19 @@
 import 'dart:async';
-
 import 'package:easy_localization/easy_localization_delegate.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:flutter_save/bloc/notification_event.dart';
 import 'package:flutter_save/bloc/prayer_bloc.dart';
 import 'package:flutter_save/bloc/prayer_event.dart';
 import 'package:flutter_save/bloc/prayer_state.dart';
 import 'package:flutter_save/models/AthanTimes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_save/notificationbloc/bloc.dart';
-import 'package:flutter_save/notificationbloc/notification_bloc.dart';
-import 'package:flutter_save/notificationbloc/notification_state.dart';
+import 'package:flutter_save/bloc/notification_bloc.dart';
+import 'package:flutter_save/bloc/notification_state.dart';
 import 'package:flutter_save/models/notification1.dart';
+import 'package:flutter_save/repository/my_flutter_app_icons.dart';
 import 'package:hijri/umm_alqura_calendar.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
-import 'package:flutter_save/repository/my_flutter_app_icons.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -60,6 +59,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: const EdgeInsets.only(top: 70.0),
                         child: Card(
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                           elevation: 10.0,
                           child: Padding(
                             padding: const EdgeInsets.only(top: 50.0),
@@ -142,9 +142,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-
-
-
                     ],
                   ),
                 ),
@@ -209,81 +206,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildArticleList(Timings item) {
-    return new Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text("Fajr",style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                    Padding(
-                      padding: EdgeInsets.only(left: 60.0),
-                    ),
-                    Text(formatTime(item.fajr),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30.0),
-                ),
-                Row(
-                  children: <Widget>[
-                    Text("Dhuhr",style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                    Padding(
-                      padding: EdgeInsets.only(left: 40.0),
-                    ),
-                    Text(formatTime(item.dhuhr),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30.0),
-                ),
-                Row(
-                  children: <Widget>[
-                    Text("Asr",style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                    Padding(
-                      padding: EdgeInsets.only(left: 60.0),
-                    ),
-                    Text(formatTime(item.asr),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30.0),
-                ),
-                Row(
-                  children: <Widget>[
-                    Text("Maghrib",style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.0),
-                    ),
-                    Text(formatTime(item.maghrib),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 30.0),
-                ),
-                Row(
-                  children: <Widget>[
-                    Text("Isha",style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                    Padding(
-                      padding: EdgeInsets.only(left: 55.0),
-                    ),
-                    Text(formatTime(item.isha),style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                ),
-              ],
-            ),
-            //Notification()
-          ],
-        ),
-      ),
-    );
+    return Column(
+            children: <Widget>[
+              singleTimeCard(AppLocalizations.of(context).tr('Fajr'),
+                  formatTime(item.fajr),
+                  MyFlutterApp.sunrise, Color(0xFFe5bf07)),
+              singleTimeCard(AppLocalizations.of(context).tr('Dhuhr'),
+                  formatTime(item.dhuhr),
+                  MyFlutterApp.sun, Color(0xFFe5bf07)),
+              singleTimeCard(AppLocalizations.of(context).tr('Asr'),
+                  formatTime(item.asr),
+                  MyFlutterApp.sun_inv, Color(0xFFe5bf07)),
+              singleTimeCard(AppLocalizations.of(context).tr('Maghrib'),
+                  formatTime(item.maghrib),
+                  MyFlutterApp.fog_sun, Color(0xFFe5bf07)),
+              singleTimeCard(AppLocalizations.of(context).tr('Isha'),
+                  formatTime(item.isha),
+                  MyFlutterApp.fog_moon, Color(0xFF86a4c3)),
+            ],
+          );
+
   }
 
   Widget NotificationIconBuild(NotificationModle notification) {
@@ -579,6 +521,34 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  String formatTime(String time){
+    List<String> timeData= to12Hour(time);
+    String formattedTime = timeData[0];
+    Localizations.localeOf(context).languageCode == "ar"
+        ? formattedTime = formattedTime + timeData[2]
+        : formattedTime = formattedTime + timeData[1];
+
+    return formattedTime;
+  }
+
+  List<String> to12Hour(String time){
+    List<String> time12hour = new List<String>();
+    String noon = " AM";
+    String noonAr = " ص";
+    int hour = int.parse(time.substring(0,2));
+    if (hour >= 12) {
+      hour = hour - 12;
+      noon = " PM";
+      noonAr = " م";
+    }
+    if (hour == 0) {
+      hour = 12;
+    }
+    time12hour.add(hour.toString() + time.substring(2,5));
+    time12hour.add(noon);
+    time12hour.add(noonAr);
+    return time12hour;
+  }
 }
 
 class Nextprayername extends StatefulWidget {
@@ -620,4 +590,23 @@ class _NextprayernameState extends State<Nextprayername> {
     timer.cancel();
     super.dispose();
   }
+}
+Widget singleTimeCard(String timeName, String time, IconData icon, Color color){
+
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget> [
+          Row(
+            children: <Widget>[
+              Icon(icon, color: color,),
+              SizedBox(width: 10,),
+              Text(timeName,style: TextStyle(fontSize: 20, color: Colors.black54, fontWeight: FontWeight.bold),),
+            ],
+          ),
+          Text(time,style: TextStyle(fontSize: 20, color: Colors.black54),),
+        ]
+    ),
+  );
 }

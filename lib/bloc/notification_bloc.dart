@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_save/bloc/notification_event.dart';
+import 'package:flutter_save/bloc/notification_state.dart';
 import 'package:flutter_save/models/notification1.dart';
 import 'package:flutter_save/repository/notifications_repository.dart';
-import './bloc.dart';
 import 'package:meta/meta.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {

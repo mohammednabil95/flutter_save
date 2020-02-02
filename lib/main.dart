@@ -2,11 +2,10 @@ import 'package:easy_localization/easy_localization_delegate.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_save/bloc/notification_bloc.dart';
 import 'package:flutter_save/bloc/prayer_bloc.dart';
 import 'package:flutter_save/home_page.dart';
-import 'package:flutter_save/notificationbloc/bloc.dart';
 import 'package:flutter_save/repository/notifications_repository.dart';
-import 'package:flutter_save/repository/options_repository.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +14,6 @@ import 'package:flutter_save/screens/map_screen.dart';
 import 'package:flutter_save/screens/qibla_screen.dart';
 import 'package:flutter_save/settings_page.dart';
 
-import 'bloc/options_bloc.dart';
 
 void main() => runApp(EasyLocalization(child: MyApp()));
 
