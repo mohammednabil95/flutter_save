@@ -16,6 +16,7 @@ import 'package:hijri/umm_alqura_calendar.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:flutter_save/repository/my_flutter_app_icons.dart';
 import 'package:intl/intl.dart';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -115,82 +116,35 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 50),
-                        child: Card(
-                          color: Colors.black,
-                          elevation: 12,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 30),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      AppLocalizations.of(context)
-                                          .tr('Next prayer'),
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height /
-                                              80),
-                                    ),
-                                    Padding(padding: EdgeInsets.all(4)),
-                                    //Nextprayername(data: data)
-                                  ],
-                                ),
-                                Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: <Widget>[
-                                    AnimatedCircularChart(
-                                      key: _chartKey,
-                                      size: Size(80.0, 60.0),
-                                      initialChartData: <CircularStackEntry>[
-                                        new CircularStackEntry(
-                                          <CircularSegmentEntry>[
-//                                            new CircularSegmentEntry(
-//                                              100 -
-//                                                  getNextPrayer()
-//                                                      .percent,
-//                                              Color(0xFFd4a554),
-//                                              rankKey: 'completed',
-//                                            ),
-//                                            new CircularSegmentEntry(
-//                                              getNextPrayer()
-//                                                  .percent,
-//                                              Color(0xFF614729),
-//                                              rankKey: 'completed',
-//                                            ),
-                                          ],
-                                          rankKey: 'progress',
-                                        ),
-                                      ],
-                                      chartType: CircularChartType.Radial,
-                                      percentageValues: true,
-                                      duration: Duration(seconds: 2),
-                                      edgeStyle: SegmentEdgeStyle.round,
-                                      labelStyle: new TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15.0,
-                                      ),
-                                    ),
-                                    //Center(child: new CountDownTimer())
-                                  ],
-                                ),
-                              ],
+                      Column(
+                        children: <Widget>[
+                          BlocListener<PrayerBloc, PrayerState>(
+                            listener: (context, state) {
+                              if (state is PrayerErrorState) {
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(state.message1),
+                                  ),
+                                );
+                              }
+                            },
+                            child: BlocBuilder<PrayerBloc, PrayerState>(
+                              builder: (context, state) {
+                                if (state is InitialPrayerState) {
+                                  return buildLoading();
+                                } else if (state is PrayerLoadedState) {
+                                  return buildCountdownList(state.item);
+                                } else if (state is PrayerErrorState) {
+                                  return buildErrorUi(state.message1);
+                                }
+                              },
                             ),
                           ),
-                        ),
+                        ],
                       ),
+
+
+
                     ],
                   ),
                 ),
@@ -463,7 +417,12 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 4,
                 ),
-                Text(''),
+//                Text(
+//                  trimToCityOnly(
+//                      snapshot.data.meta.timezone),
+//                  style: TextStyle(
+//                      fontSize: 12, color: Colors.white),
+//                ),
               ],
             ),
           ],
@@ -540,33 +499,125 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  String formatTime(String time){
-    List<String> timeData= to12Hour(time);
-    String formattedTime = timeData[0];
-    Localizations.localeOf(context).languageCode == "ar"
-        ? formattedTime = formattedTime + timeData[2]
-        : formattedTime = formattedTime + timeData[1];
+  Widget buildCountdownList(Timings item) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 50),
+      child: Card(
+        color: Colors.black,
+        elevation: 12,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              vertical: 20, horizontal: 30),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    AppLocalizations.of(context)
+                        .tr('Next prayer'),
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: MediaQuery.of(context)
+                            .size
+                            .height /
+                            80),
+                  ),
+                  Padding(padding: EdgeInsets.all(4)),
+                  //Nextprayername(data: data)
+                ],
+              ),
+              Stack(
+                alignment: AlignmentDirectional.center,
+                children: <Widget>[
+                  AnimatedCircularChart(
+                    key: _chartKey,
+                    size: Size(80.0, 60.0),
+                    initialChartData: <CircularStackEntry>[
+                      new CircularStackEntry(
+                        <CircularSegmentEntry>[
+//                          new CircularSegmentEntry(
+//                            100 -
+//                                getNextPrayer(snapshot
+//                                    .data.timings)
+//                                    .percent,
+//                            Color(0xFFd4a554),
+//                            rankKey: 'completed',
+//                          ),
+//                          new CircularSegmentEntry(
+//                            getNextPrayer(snapshot
+//                                .data.timings)
+//                                .percent,
+//                            Color(0xFF614729),
+//                            rankKey: 'completed',
+//                          ),
+                        ],
+                        rankKey: 'progress',
+                      ),
+                    ],
+                    chartType: CircularChartType.Radial,
+                    percentageValues: true,
+                    duration: Duration(seconds: 2),
+                    edgeStyle: SegmentEdgeStyle.round,
+                    labelStyle: new TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
+                  ),
+                  //Center(child: new CountDownTimer())
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
-    return formattedTime;
+class Nextprayername extends StatefulWidget {
+
+  const Nextprayername({
+    Key key,
+    @required this.data,
+  }) : super(key: key);
+
+  final Datum data;
+
+  @override
+  _NextprayernameState createState() => _NextprayernameState();
+}
+
+class _NextprayernameState extends State<Nextprayername> {
+
+  Timer timer;
+
+  startTimer(){
+    int nextPrayerSeconds =
+    (getNextPrayer(widget.data.timings).duration.inSeconds);
+    timer = Timer.periodic(Duration(seconds: nextPrayerSeconds), (timer) {
+      setState(() {});
+    });
   }
 
-  List<String> to12Hour(String time){
-    List<String> time12hour = new List<String>();
-    String noon = " AM";
-    String noonAr = " ص";
-    int hour = int.parse(time.substring(0,2));
-    if (hour >= 12) {
-      hour = hour - 12;
-      noon = " PM";
-      noonAr = " م";
-    }
-    if (hour == 0) {
-      hour = 12;
-    }
-    time12hour.add(hour.toString() + time.substring(2,5));
-    time12hour.add(noon);
-    time12hour.add(noonAr);
-    return time12hour;
-  }
+  @override
+  Widget build(BuildContext context) {
 
+    startTimer();
+    return Text(
+      AppLocalizations.of(context).tr(
+          getNextPrayer(widget.data.timings)
+              .prayerName), style: TextStyle(color: Colors.white, fontSize: 20),);
+  }
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 }
