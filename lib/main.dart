@@ -2,9 +2,11 @@ import 'package:easy_localization/easy_localization_delegate.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_save/bloc/bloc.dart';
 import 'package:flutter_save/bloc/notification_bloc.dart';
 import 'package:flutter_save/bloc/prayer_bloc.dart';
-import 'package:flutter_save/home_page.dart';
+import 'package:flutter_save/repository/timer_repository.dart';
+import 'package:flutter_save/screens/home_page.dart';
 import 'package:flutter_save/repository/notifications_repository.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_save/screens/calendar_screen.dart';
 import 'package:flutter_save/screens/map_screen.dart';
 import 'package:flutter_save/screens/qibla_screen.dart';
-import 'package:flutter_save/settings_page.dart';
+import 'package:flutter_save/screens/settings_page.dart';
 
 
 void main() => runApp(EasyLocalization(child: MyApp()));
@@ -46,7 +48,11 @@ class MyApp extends StatelessWidget {
                 ),
                 BlocProvider<NotificationBloc>(
                   create: (BuildContext context)=>NotificationBloc(notificationsRepository: NotificationsRepositoryImp()),
-                )
+                ),
+                BlocProvider<TimerBloc>(
+                  create: (BuildContext context)=>TimerBloc(ticker: Ticker()),
+                ),
+
 //                BlocProvider<OptionsBloc>(
 //                create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
 //                ),

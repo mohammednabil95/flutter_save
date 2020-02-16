@@ -19,6 +19,6 @@ class SelectNotificationEvent extends NotificationEvent {
 
   @override
   // TODO: implement props
-  List<Object> get props => null;
+  List<Object> get props => [notificationModle];
 
 }

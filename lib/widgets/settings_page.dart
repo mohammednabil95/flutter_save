@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_save/models/enum_prayer_methods.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Languages.dart';
+import '../models/Languages.dart';
 import '../main.dart';
 
 class SettingsPage extends StatefulWidget {

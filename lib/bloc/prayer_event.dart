@@ -10,6 +10,8 @@ class FetchPrayerEvent extends PrayerEvent {
 
 
 
+
+
 //class FetchPrayerEventWithMethod extends PrayerEvent {
 //
 //  final int method;

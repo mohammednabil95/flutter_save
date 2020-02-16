@@ -30,5 +30,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     else if(event is SelectNotificationEvent){
       await notificationsRepository.saveNotifications(event.notificationModle);
     }
+    else{
+      yield InitialNotificationState();
+    }
   }
 }
