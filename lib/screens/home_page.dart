@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   String dateFormat;
   var now = new DateTime.now();
   int dateDay;
+  int test;
 
   @override
   void initState() {
