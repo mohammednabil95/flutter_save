@@ -12,22 +12,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_save/bloc/notification_bloc.dart';
 import 'package:flutter_save/bloc/notification_state.dart';
 import 'package:flutter_save/models/notification1.dart';
-import 'package:flutter_save/repository/timer_repository.dart';
 import 'package:flutter_save/services/presentation/my_flutter_app_icons.dart';
 import 'package:hijri/umm_alqura_calendar.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
-  Datum data;
-
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<AnimatedCircularChartState> _chartKey =
-      new GlobalKey<AnimatedCircularChartState>();
+  new GlobalKey<AnimatedCircularChartState>();
   PrayerBloc prayerBloc;
   NotificationBloc notificationBloc;
   ummAlquraCalendar hijriDate = new ummAlquraCalendar.now();
@@ -84,15 +81,15 @@ class _HomePageState extends State<HomePage> {
                                         }
                                       },
                                       child:
-                                          BlocBuilder<PrayerBloc, PrayerState>(
+                                      BlocBuilder<PrayerBloc, PrayerState>(
                                         builder: (context, state) {
                                           if (state is InitialPrayerState) {
                                             return buildLoading();
                                           } else if (state
-                                              is PrayerLoadedState) {
+                                          is PrayerLoadedState) {
                                             return buildArticleList(state.item);
                                           } else if (state
-                                              is PrayerErrorState) {
+                                          is PrayerErrorState) {
                                             return buildErrorUi(state.message1);
                                           }
                                         },
@@ -109,14 +106,14 @@ class _HomePageState extends State<HomePage> {
                                           NotificationState>(
                                         builder: (context, state) {
                                           if (state
-                                              is InitialNotificationState) {
+                                          is InitialNotificationState) {
                                             return buildLoading();
                                           } else if (state
-                                              is NotificationLoadedState) {
+                                          is NotificationLoadedState) {
                                             return NotificationIconBuild(
                                                 state.notification);
                                           } else if (state
-                                              is NotificationErrorState) {
+                                          is NotificationErrorState) {
                                             return buildErrorUi(state.message1);
                                           }
                                         },
@@ -131,25 +128,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Column(
                         children: <Widget>[
-                          BlocListener<TimerBloc, TimerState>(
+                          BlocListener<PrayerBloc, PrayerState>(
                             listener: (context, state) {},
-                            child: BlocBuilder<TimerBloc, TimerState>(
+                            child: BlocBuilder<PrayerBloc, PrayerState>(
                               builder: (context, state) {
-//                                final String minutesStr =
-//                                    ((state.duration / 60) % 60)
-//                                        .floor()
-//                                        .toString()
-//                                        .padLeft(2, '0');
-                                String nextPrayerMinutes =
-                                (getNextPrayer(widget.data.timings).duration.inMinutes % 60).toString();
-                                String nextPrayerHours =
-                                getNextPrayer(widget.data.timings).duration.inHours.toString();
-                                String nextPrayerSeconds =
-                                (getNextPrayer(widget.data.timings).duration.inSeconds % 60).toString();
-//                                final String secondsStr = (state.duration % 60)
-//                                    .floor()
-//                                    .toString()
-//                                    .padLeft(2, '0');
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 50),
@@ -158,21 +140,21 @@ class _HomePageState extends State<HomePage> {
                                     elevation: 12,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
-                                            BorderRadius.circular(30)),
+                                        BorderRadius.circular(30)),
                                     child: Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 20, horizontal: 30),
                                       child: Row(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Column(
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                             mainAxisAlignment:
-                                                MainAxisAlignment.start,
+                                            MainAxisAlignment.start,
                                             children: <Widget>[
                                               Text(
                                                 AppLocalizations.of(context)
@@ -180,10 +162,10 @@ class _HomePageState extends State<HomePage> {
                                                 style: TextStyle(
                                                     color: Colors.grey,
                                                     fontSize:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height /
-                                                            80),
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                        80),
                                               ),
                                               Padding(
                                                   padding: EdgeInsets.all(4)),
@@ -192,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                           Stack(
                                             alignment:
-                                                AlignmentDirectional.center,
+                                            AlignmentDirectional.center,
                                             children: <Widget>[
                                               AnimatedCircularChart(
                                                 key: _chartKey,
@@ -221,24 +203,18 @@ class _HomePageState extends State<HomePage> {
                                                   ),
                                                 ],
                                                 chartType:
-                                                    CircularChartType.Radial,
+                                                CircularChartType.Radial,
                                                 percentageValues: true,
                                                 duration: Duration(seconds: 2),
                                                 edgeStyle:
-                                                    SegmentEdgeStyle.round,
+                                                SegmentEdgeStyle.round,
                                                 labelStyle: new TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 15.0,
                                                 ),
                                               ),
-                                             // Center(child: new CountDownTimer(data: data))
-                                              Text('$nextPrayerHours:$nextPrayerMinutes:$nextPrayerSeconds',
-                                                  style: TextStyle(
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.white)),
+                                              // Center(child: new CountDownTimer(data: data))
                                             ],
                                           ),
                                         ],
@@ -264,7 +240,7 @@ class _HomePageState extends State<HomePage> {
             color: Colors.black,
             elevation: 20,
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: BlocListener<PrayerBloc, PrayerState>(
@@ -557,7 +533,7 @@ class _HomePageState extends State<HomePage> {
               //refreshLocation
             },
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
             color: Color(0xFF614729),
             elevation: 10,
             padding: EdgeInsets.all(0),
@@ -643,57 +619,4 @@ Widget singleTimeCard(
           ),
         ]),
   );
-}
-
-class CountDownTimer extends StatefulWidget {
-  const CountDownTimer({
-    Key key,
-    @required this.data,
-  }) : super(key: key);
-
-  final Datum data;
-
-  @override
-  _CountDownTimerState createState() => _CountDownTimerState();
-}
-
-class _CountDownTimerState extends State<CountDownTimer> {
-  DateTime date;
-  var now = new DateTime.now();
-  int dateDay;
-  Timer timer;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    dateDay = now.day;
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {});
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    String nextPrayerHours =
-        getNextPrayer(widget.data.timings).duration.inHours.toString();
-    String nextPrayerSeconds =
-        (getNextPrayer(widget.data.timings).duration.inSeconds % 60).toString();
-    String nextPrayerMinutes =
-        (getNextPrayer(widget.data.timings).duration.inMinutes % 60).toString();
-
-    return Text(
-      "$nextPrayerHours:$nextPrayerMinutes:$nextPrayerSeconds",
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 14.0,
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
 }

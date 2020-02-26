@@ -26,6 +26,8 @@ class PrayerLoadedState extends PrayerState {
 
 
 
+
+
 class PrayerErrorState extends PrayerState {
 
   String message1;
