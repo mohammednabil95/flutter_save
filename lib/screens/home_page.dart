@@ -128,10 +128,18 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Column(
                         children: <Widget>[
-                          BlocListener<PrayerBloc, PrayerState>(
+                          BlocListener<TimerBloc, TimerState>(
                             listener: (context, state) {},
-                            child: BlocBuilder<PrayerBloc, PrayerState>(
+                            child: BlocBuilder<TimerBloc, TimerState>(
                               builder: (context, state) {
+                                final String minutesStr = ((state.duration / 60) % 60)
+                                    .floor()
+                                    .toString()
+                                    .padLeft(2, '0');
+                                final String secondsStr = (state.duration % 60)
+                                    .floor()
+                                    .toString()
+                                    .padLeft(2, '0');
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 50),
@@ -214,6 +222,11 @@ class _HomePageState extends State<HomePage> {
                                                   fontSize: 15.0,
                                                 ),
                                               ),
+
+                                Text(
+                                  '$secondsStr',
+                                  style: TextStyle(color: Colors.white),
+                                ),
                                               // Center(child: new CountDownTimer(data: data))
                                             ],
                                           ),

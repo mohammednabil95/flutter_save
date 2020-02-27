@@ -15,20 +15,26 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationState get initialState => InitialNotificationState();
 
   @override
-  Stream<NotificationState> mapEventToState(
-    NotificationEvent event,
-  ) async* {
-    if(event is FetchNotificationEvent){
+  Stream<NotificationState> mapEventToState(NotificationEvent event,) async* {
+    if (event is FetchNotificationEvent) {
       try {
-        NotificationModle notification = await notificationsRepository.getNotifications();
+        NotificationModle notification = await notificationsRepository
+            .getNotifications();
         yield NotificationLoadedState(notification: notification);
       }
       catch (e) {
         yield NotificationErrorState(message1: e.toString());
       }
     }
-    else if(event is SelectNotificationEvent){
-      await notificationsRepository.saveNotifications(event.notificationModle);
+    else if (event is SelectNotificationEvent) {
+      try {
+        await notificationsRepository.saveNotifications(
+            event.notificationModle);
+        yield NotificationSavedState(notification: event.notificationModle);
+      }
+      catch (e) {
+        yield NotificationErrorState(message1: e.toString());
+      }
     }
     else{
       yield InitialNotificationState();

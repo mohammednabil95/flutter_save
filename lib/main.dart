@@ -15,6 +15,8 @@ import 'package:flutter_save/screens/map_screen.dart';
 import 'package:flutter_save/screens/qibla_screen.dart';
 import 'package:flutter_save/screens/settings_page.dart';
 
+import 'models/ticker.dart';
+
 
 void main() => runApp(EasyLocalization(child: MyApp()));
 
@@ -47,6 +49,9 @@ class MyApp extends StatelessWidget {
                 ),
                 BlocProvider<NotificationBloc>(
                   create: (BuildContext context)=>NotificationBloc(notificationsRepository: NotificationsRepositoryImp()),
+                ),
+                BlocProvider<TimerBloc>(
+                  create: (BuildContext context)=>TimerBloc(ticker: Ticker()),
                 ),
 
 //                BlocProvider<OptionsBloc>(
