@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization_delegate.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:flutter_save/bloc/bloc.dart';
 import 'package:flutter_save/bloc/notification_event.dart';
@@ -32,16 +33,20 @@ class _HomePageState extends State<HomePage> {
   var now = new DateTime.now();
   int dateDay;
   int test;
+  String minutesStr, secondsStr, hoursStr;
+
+  TimerBloc timerBloc;
 
   @override
   void initState() {
-    super.initState();
+
     notificationBloc = BlocProvider.of<NotificationBloc>(context);
     prayerBloc = BlocProvider.of<PrayerBloc>(context);
     prayerBloc.add(FetchPrayerEvent());
     notificationBloc.add(FetchNotificationEvent());
     dateDay = now.day;
     dateFormat = DateFormat('dd/MM/yyyy').format(now);
+    super.initState();
   }
 
   @override
@@ -55,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                   child: Stack(
                     children: <Widget>[
                       Padding(
@@ -65,181 +70,59 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(20)),
                           elevation: 10.0,
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 50.0),
+                            padding: const EdgeInsets.only(top: 50.0, bottom: 10, left: 10, right: 10),
                             child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+                              
                               children: <Widget>[
-                                Column(
-                                  children: <Widget>[
-                                    BlocListener<PrayerBloc, PrayerState>(
-                                      listener: (context, state) {
-                                        if (state is PrayerErrorState) {
-                                          Scaffold.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(state.message1),
-                                            ),
-                                          );
+                                 Center(
+                                    child: BlocBuilder<PrayerBloc, PrayerState>(
+                                      builder: (context, state) {
+                                        if (state is InitialPrayerState) {
+                                          return buildLoading();
+                                        } else if (state
+                                        is PrayerLoadedState) {
+                                          timerBloc = BlocProvider.of<TimerBloc>(context);
+                                          timerBloc.add(Start(duration: state.nextPrayer.duration.inSeconds));
+                                          return buildArticleList(state.item);
+                                        } else if (state is PrayerErrorState) {
+                                          return buildErrorUi(state.message1);
                                         }
                                       },
-                                      child:
-                                      BlocBuilder<PrayerBloc, PrayerState>(
-                                        builder: (context, state) {
-                                          if (state is InitialPrayerState) {
-                                            return buildLoading();
-                                          } else if (state
-                                          is PrayerLoadedState) {
-                                            return buildArticleList(state.item);
-                                          } else if (state
-                                          is PrayerErrorState) {
-                                            return buildErrorUi(state.message1);
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
+
+                                  ),
                                 ),
-                                Column(
-                                  children: <Widget>[
-                                    BlocListener<NotificationBloc,
-                                        NotificationState>(
-                                      listener: (context, state) {},
-                                      child: BlocBuilder<NotificationBloc,
-                                          NotificationState>(
-                                        builder: (context, state) {
-                                          if (state
-                                          is InitialNotificationState) {
-                                            return buildLoading();
-                                          } else if (state
-                                          is NotificationLoadedState) {
-                                            return NotificationIconBuild(
-                                                state.notification);
-                                          } else if (state
-                                          is NotificationErrorState) {
-                                            return buildErrorUi(state.message1);
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
+                                BlocBuilder<NotificationBloc, NotificationState>(
+                                    builder: (context, state) {
+                                      if (state is InitialNotificationState) {
+                                        return buildLoading();
+                                      } else if (state is NotificationLoadedState) {
+                                        return NotificationIconBuild(
+                                            state.notification);
+                                      } else if (state is NotificationErrorState) {
+                                        return buildErrorUi(state.message1);
+                                      }
+                                      else if (state is NotificationSavedState) {
+                                        return NotificationIconBuild(
+                                            state.notification);
+                                      }
+                                    },
+                                  ),
                               ],
                             ),
                           ),
                         ),
                       ),
-                      Column(
-                        children: <Widget>[
-                          BlocListener<TimerBloc, TimerState>(
-                            listener: (context, state) {},
-                            child: BlocBuilder<TimerBloc, TimerState>(
-                              builder: (context, state) {
-                                final String minutesStr = ((state.duration / 60) % 60)
-                                    .floor()
-                                    .toString()
-                                    .padLeft(2, '0');
-                                final String secondsStr = (state.duration % 60)
-                                    .floor()
-                                    .toString()
-                                    .padLeft(2, '0');
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 50),
-                                  child: Card(
-                                    color: Colors.black,
-                                    elevation: 12,
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                        BorderRadius.circular(30)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 20, horizontal: 30),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                AppLocalizations.of(context)
-                                                    .tr('Next prayer'),
-                                                style: TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize:
-                                                    MediaQuery.of(context)
-                                                        .size
-                                                        .height /
-                                                        80),
-                                              ),
-                                              Padding(
-                                                  padding: EdgeInsets.all(4)),
-                                              //Nextprayername(data: data)
-                                            ],
-                                          ),
-                                          Stack(
-                                            alignment:
-                                            AlignmentDirectional.center,
-                                            children: <Widget>[
-                                              AnimatedCircularChart(
-                                                key: _chartKey,
-                                                size: Size(80.0, 60.0),
-                                                initialChartData: <
-                                                    CircularStackEntry>[
-                                                  new CircularStackEntry(
-                                                    <CircularSegmentEntry>[
-//                                                      new CircularSegmentEntry(
-//                                                        100 -
-//                                                            getNextPrayer(snapshot
-//                                                                .data.timings)
-//                                                                .percent,
-//                                                        Color(0xFFd4a554),
-//                                                        rankKey: 'completed',
-//                                                      ),
-//                                                      new CircularSegmentEntry(
-//                                                        getNextPrayer(
-//                                                            snapshot.data.timings)
-//                                                            .percent,
-//                                                        Color(0xFF614729),
-//                                                        rankKey: 'completed',
-//                                                      ),
-                                                    ],
-                                                    rankKey: 'progress',
-                                                  ),
-                                                ],
-                                                chartType:
-                                                CircularChartType.Radial,
-                                                percentageValues: true,
-                                                duration: Duration(seconds: 2),
-                                                edgeStyle:
-                                                SegmentEdgeStyle.round,
-                                                labelStyle: new TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15.0,
-                                                ),
-                                              ),
-
-                                Text(
-                                  '$secondsStr',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                              // Center(child: new CountDownTimer(data: data))
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                      BlocBuilder<PrayerBloc, PrayerState>(
+                          builder: (context, state) {
+                            if (state is PrayerLoadedState) {
+                              return buildprogress(state.nextPrayer);
+                            }
+                            else
+                              return Container();
+                          })
                     ],
                   ),
                 ),
@@ -248,7 +131,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(2.0),
+          padding: const EdgeInsets.all(10.0),
           child: Card(
             color: Colors.black,
             elevation: 20,
@@ -285,6 +168,110 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Padding buildprogress(NextPrayer nextPrayer) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: 50),
+      child: Card(
+        color: Colors.black,
+        elevation: 12,
+        shape: RoundedRectangleBorder(
+            borderRadius:
+            BorderRadius.circular(30)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              vertical: 20, horizontal: 30),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    AppLocalizations.of(context)
+                        .tr('Next prayer'),
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: MediaQuery.of(context).size.height / 80),
+                  ),
+                  Padding(
+                      padding: EdgeInsets.all(4)),
+                  Text(
+                    AppLocalizations.of(context).tr(nextPrayer.prayerName),
+                    style: TextStyle(color: Colors.white, fontSize: 20),),
+                ],
+              ),
+              Stack(
+                alignment:
+                AlignmentDirectional.center,
+                children: <Widget>[
+                  AnimatedCircularChart(
+                    key: _chartKey,
+                    size: Size(80.0, 60.0),
+                    initialChartData: <
+                        CircularStackEntry>[
+                      new CircularStackEntry(
+                        <CircularSegmentEntry>[
+                            new CircularSegmentEntry(
+                              100 - nextPrayer.percent,
+                              Color(0xFFd4a554),
+                              rankKey: 'completed',
+                            ),
+                            new CircularSegmentEntry(
+                             nextPrayer.percent,
+                              Color(0xFF614729),
+                              rankKey: 'completed',
+                            ),
+                        ],
+                        rankKey: 'progress',
+                      ),
+                    ],
+                    chartType:
+                    CircularChartType.Radial,
+                    percentageValues: true,
+                    duration: Duration(seconds: 2),
+                    edgeStyle:
+                    SegmentEdgeStyle.round,
+                    labelStyle: new TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
+                  ),
+
+              BlocBuilder<TimerBloc, TimerState> (
+                  builder: (context,state) {
+                    hoursStr = ((state.duration / 60 / 60) % 12)
+                        .floor()
+                        .toString();
+                        //.padLeft(2,'0');
+                    minutesStr = ((state.duration / 60) % 60)
+                        .floor()
+                        .toString()
+                        .padLeft(2,'0');
+                    secondsStr = (state.duration % 60)
+                        .floor()
+                        .toString()
+                        .padLeft(2,'0');
+                    return Center(
+                      child: Text(
+                        '$hoursStr:$minutesStr:$secondsStr',style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  },
+              ),// Center(child: new CountDownTimer(data: data))
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
   Widget buildLoading() {
     return Center(
       child: CircularProgressIndicator(),
@@ -305,6 +292,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildArticleList(Timings item) {
     return Column(
+     crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         singleTimeCard(AppLocalizations.of(context).tr('Fajr'),
             formatTime(item.fajr), MyFlutterApp.sunrise, Color(0xFFe5bf07)),
@@ -322,6 +311,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget NotificationIconBuild(NotificationModle notification) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         notificationIcon("fajr", notification),
         notificationIcon("duhur", notification),
@@ -342,10 +332,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.fajr = true;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
@@ -353,10 +340,8 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.fajr = false;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                  notificationBloc.add(SelectNotificationEvent(notificationModle));
+
               },
             );
         }
@@ -368,10 +353,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.duhur = true;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                  notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
@@ -379,10 +361,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.duhur = false;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                  notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
         }
@@ -394,10 +373,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.asr = true;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                  notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
@@ -405,11 +381,9 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.asr = false;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
-              },
+                notificationBloc.add(
+                    SelectNotificationEvent(notificationModle));
+              }
             );
         }
         break;
@@ -421,10 +395,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.magrib = true;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                  notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
@@ -432,10 +403,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.magrib = false;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                  notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
         }
@@ -448,10 +416,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.esha = true;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                  notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
@@ -459,10 +424,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.esha = false;
-                setState(() {
-                  notificationBloc
-                      .add(SelectNotificationEvent(notificationModle));
-                });
+                  notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
         }
@@ -604,32 +566,32 @@ class _HomePageState extends State<HomePage> {
 Widget singleTimeCard(
     String timeName, String time, IconData icon, Color color) {
   return Padding(
-    padding: const EdgeInsets.all(16.0),
+    padding: const EdgeInsets.only(left: 10 ,bottom: 30),
     child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Icon(
-                icon,
-                color: color,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Text(
-                timeName,
-                style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-          Text(
-            time,
-            style: TextStyle(fontSize: 20, color: Colors.black54),
-          ),
-        ]),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Icon(
+          icon,
+          color: color,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Text(
+          timeName,
+          style: TextStyle(
+              fontSize: 20,
+              color: Colors.black54,
+              fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Text(
+          time,
+          style: TextStyle(fontSize: 20, color: Colors.black54),
+        ),
+      ],
+    ),
   );
 }

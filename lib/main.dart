@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization_delegate.dart';
 import 'package:easy_localization/easy_localization_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_save/bloc/bloc.dart';
@@ -14,9 +15,7 @@ import 'package:flutter_save/screens/calendar_screen.dart';
 import 'package:flutter_save/screens/map_screen.dart';
 import 'package:flutter_save/screens/qibla_screen.dart';
 import 'package:flutter_save/screens/settings_page.dart';
-
 import 'models/ticker.dart';
-
 
 void main() => runApp(EasyLocalization(child: MyApp()));
 
@@ -53,8 +52,8 @@ class MyApp extends StatelessWidget {
                 BlocProvider<TimerBloc>(
                   create: (BuildContext context)=>TimerBloc(ticker: Ticker()),
                 ),
-
-//                BlocProvider<OptionsBloc>(
+//
+//              BlocProvider<OptionsBloc>(
 //                create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
 //                ),
               ],
@@ -95,10 +94,8 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
   @override
   void initState() {
     super.initState();
-
     // Initialize the Tab Controller
-    controller = new TabController(length: 2, vsync: this);
-
+    controller = new TabController(length: 4, vsync: this);
   }
 
 
@@ -107,14 +104,6 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
     // Dispose of the Tab Controller
     controller.dispose();
     super.dispose();
-  }
-
-  //RadioButton
-  var radio1=0;
-  void radiochecked(int val){
-    setState(() {
-      radio1=val;
-    });
   }
 
   @override
@@ -128,13 +117,9 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
       data: data,
       child: Stack(
         children: <Widget>[
-
           SafeArea(
             child: Container(
-
-
               decoration: BoxDecoration(
-
                 image: DecorationImage(
                   image: AssetImage("assets/AppBackground.jpg"),
                   fit: BoxFit.cover,
@@ -143,30 +128,23 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
             ),
           ),
 
-
-
           WillPopScope(
             onWillPop: () async {
               SystemNavigator.pop();
             },
             child: Scaffold(
-
               backgroundColor: Colors.transparent,
               appBar: AppBar(
-                automaticallyImplyLeading: false,
-                title: Row(
-                  children: <Widget>[
-                    Image(image: AssetImage("assets/SalawatLogoIcon1.png"), fit: BoxFit.contain,),
-                    Padding(padding: EdgeInsets.all(1)),
-                    Text(
-                      AppLocalizations.of(context).tr('Salah Times'),
-                      style: TextStyle(color: Colors.white ,fontSize: 18, fontWeight: FontWeight.normal),),
-                  ],
-                ),
-
+                leading: Image(image: AssetImage("assets/SalawatLogoIcon1.png"),),
+              primary: true,
+                //automaticallyImplyLeading: false,
+                title:
+                   Text(
+                     AppLocalizations.of(context).tr('Salah Times'),
+                    style: TextStyle(color: Colors.white ,fontSize: 18, fontWeight: FontWeight.normal),
+                   ),
                 backgroundColor: Colors.black38,
                 elevation: 0,
-
               actions: <Widget>[
                 IconButton(
                   icon: Icon( Icons.menu),
@@ -218,7 +196,6 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
             ),
           ),
         ],
-
         // Set the bottom navigation bar
       ),
     );

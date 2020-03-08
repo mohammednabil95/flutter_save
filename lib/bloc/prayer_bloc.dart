@@ -21,7 +21,8 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
     if (event is FetchPrayerEvent ) {
       try {
         Timings item = await repository.getItem();
-        yield PrayerLoadedState(item: item);
+        NextPrayer nextPrayer = repository.getNextPrayer(item);
+        yield PrayerLoadedState(item: item, nextPrayer: nextPrayer);
       } catch (e) {
         yield PrayerErrorState(message1: e.toString());
       }

@@ -481,3 +481,11 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
+
+class NextPrayer {
+  String prayerName;
+  Duration duration;
+  double percent;
+
+  NextPrayer(this.prayerName, this.duration, this.percent);
+}

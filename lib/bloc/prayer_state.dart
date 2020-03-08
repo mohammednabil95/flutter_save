@@ -16,8 +16,10 @@ class InitialPrayerState extends PrayerState {
 class PrayerLoadedState extends PrayerState {
 
   Timings item;
+  NextPrayer nextPrayer;
 
-  PrayerLoadedState({@required this.item});
+
+  PrayerLoadedState({@required this.item, @required this.nextPrayer});
 
   @override
   // TODO: implement props
