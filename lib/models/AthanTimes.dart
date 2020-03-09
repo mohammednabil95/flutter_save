@@ -126,7 +126,7 @@ class Gregorian {
 
 class Designation {
   Abbreviated abbreviated;
-  Expanded expanded;
+  Expanded1 expanded;
 
   Designation({
     this.abbreviated,
@@ -151,11 +151,11 @@ final abbreviatedValues = EnumValues({
   "AH": Abbreviated.AH
 });
 
-enum Expanded { ANNO_DOMINI, ANNO_HEGIRAE }
+enum Expanded1 { ANNO_DOMINI, ANNO_HEGIRAE }
 
 final expandedValues = EnumValues({
-  "Anno Domini": Expanded.ANNO_DOMINI,
-  "Anno Hegirae": Expanded.ANNO_HEGIRAE
+  "Anno Domini": Expanded1.ANNO_DOMINI,
+  "Anno Hegirae": Expanded1.ANNO_HEGIRAE
 });
 
 enum Format { DD_MM_YYYY }

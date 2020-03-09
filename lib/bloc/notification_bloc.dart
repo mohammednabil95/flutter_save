@@ -32,7 +32,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         yield NotificationLoadedState(notification: notification);
         //yield NotificationSavedState(notification: event.notificationModle);
       }
-      catch (e) {
+      catch (e){
         yield NotificationErrorState(message1: e.toString());
       }
     }
