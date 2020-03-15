@@ -23,13 +23,3 @@ class SelectNotificationEvent extends NotificationEvent {
   List<Object> get props => [notificationModle];
 
 }
-
-class OneNotificationEvent extends NotificationEvent{
-  static Timings timings;
-  var test=timings.fajr.split(":");
-  OneNotificationEvent(this.test);
-  @override
-  // TODO: implement props
-  List<Object> get props => [timings];
-
-}

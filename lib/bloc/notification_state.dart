@@ -32,15 +32,6 @@ class NotificationSavedState extends NotificationState {
   List<Object> get props => [notification];
 }
 
-class OneNotificationState extends NotificationState{
-  Timings timings;
-  OneNotificationState({@required this.timings});
-  @override
-  // TODO: implement props
-  List<Object> get props => [timings];
-
-}
-
 
 class NotificationErrorState extends NotificationState {
 

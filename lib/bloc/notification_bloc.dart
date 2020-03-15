@@ -37,15 +37,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         yield NotificationErrorState(message1: e.toString());
       }
     }
-    else if(event is OneNotificationEvent){
-      try{
-        //Timings timings=await notificationsRepository.getNotify();
-        //yield OneNotificationState(timings: timings);
-
-      }catch (e) {
-      yield NotificationErrorState(message1: e.toString());
-    }
-    }
     else{
       yield InitialNotificationState();
     }

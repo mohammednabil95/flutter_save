@@ -269,9 +269,9 @@ class _CalendarPageState extends State<CalendarPage> {
 
     print(picked);
     if (picked != null && picked!=selectedDate){
-      setState(() {
+   //   setState(() {
         selectedDate=picked;
-      });
+   //   });
     }
       calendarBloc.add(GetCalendarEvent(date));
   }
@@ -285,9 +285,9 @@ class _CalendarPageState extends State<CalendarPage> {
     );
     if (picked != null && picked !=selectedDateG) {
 
-      setState(() {
+   //   setState(() {
         selectedDateG=picked;
-      });
+   //   });
       calendarBloc.add(GetCalendarEvent(picked));
     }
   }
