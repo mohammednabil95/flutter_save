@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_save/models/AthanTimes.dart';
 import 'package:flutter_save/models/notification1.dart';
 
 abstract class NotificationEvent extends Equatable {
@@ -20,5 +21,15 @@ class SelectNotificationEvent extends NotificationEvent {
   @override
   // TODO: implement props
   List<Object> get props => [notificationModle];
+
+}
+
+class OneNotificationEvent extends NotificationEvent{
+  static Timings timings;
+  var test=timings.fajr.split(":");
+  OneNotificationEvent(this.test);
+  @override
+  // TODO: implement props
+  List<Object> get props => [timings];
 
 }
