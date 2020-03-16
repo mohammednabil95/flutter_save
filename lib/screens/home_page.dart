@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ),
               ),
-            ],
+            ], // khkj
                                   ),
                                 ),
                                 BlocBuilder<NotificationBloc, NotificationState>(
