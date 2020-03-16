@@ -33,9 +33,10 @@ class _HomePageState extends State<HomePage> {
   String minutesStr, secondsStr, hoursStr;
   TimerBloc timerBloc;
 
+
+
   @override
   void initState() {
-
     notificationBloc = BlocProvider.of<NotificationBloc>(context);
     prayerBloc = BlocProvider.of<PrayerBloc>(context);
     prayerBloc.add(FetchPrayerEvent());
@@ -94,10 +95,6 @@ class _HomePageState extends State<HomePage> {
                                           state.notification);
                                     } else if (state is NotificationErrorState) {
                                       return buildErrorUi(state.message1);
-                                    }
-                                    else if (state is NotificationSavedState) {
-                                      return NotificationIconBuild(
-                                          state.notification);
                                     }
                                   },
                                 ),
@@ -232,7 +229,8 @@ class _HomePageState extends State<HomePage> {
                   ),
 
               BlocBuilder<TimerBloc, TimerState> (
-                  builder: (context,state) {
+                builder: (context,state) {
+                  if(state is Running ) {
                     hoursStr = ((state.duration / 60 / 60) % 12)
                         .floor()
                         .toString();
@@ -250,7 +248,12 @@ class _HomePageState extends State<HomePage> {
                         '$hoursStr:$minutesStr:$secondsStr',style: TextStyle(color: Colors.white),
                       ),
                     );
-                  },
+                  }else  if(state is NextP ) {
+                    prayerBloc = BlocProvider.of<PrayerBloc>(context);
+                    prayerBloc.add(FetchPrayerEvent());
+                    return Container();
+                  }
+                }
               ),// Center(child: new CountDownTimer(data: data))
                 ],
               ),

@@ -16,3 +16,10 @@ class Running extends TimerState {
   String toString() => 'Running { duration: $duration}';
 }
 
+class NextP extends TimerState {
+  const NextP(int duration) : super(duration);
+
+  @override
+  String toString() => 'Running { duration: $duration}';
+}
+

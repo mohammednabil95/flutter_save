@@ -17,9 +17,9 @@ class PrayerLoadedState extends PrayerState {
 
   Timings item;
   NextPrayer nextPrayer;
+  String location;
 
-
-  PrayerLoadedState({@required this.item, @required this.nextPrayer});
+  PrayerLoadedState({@required this.item, @required this.nextPrayer, @required this.location});
 
   @override
   // TODO: implement props

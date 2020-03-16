@@ -8,15 +8,16 @@ class FetchPrayerEvent extends PrayerEvent {
   List<Object> get props => null;
 }
 
+class FetchPrayerMethodEvent extends PrayerEvent {
+
+  int method;
 
 
+  FetchPrayerMethodEvent({this.method});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [method];
+}
 
 
-//class FetchPrayerEventWithMethod extends PrayerEvent {
-//
-//  final int method;
-//  FetchPrayerEventWithMethod(this.method);
-//  @override
-//  // TODO: implement props
-//  List<Object> get props => null;
-//}

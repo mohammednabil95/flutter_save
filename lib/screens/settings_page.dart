@@ -1,4 +1,5 @@
 import 'package:flutter_save/bloc/bloc.dart';
+import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:flutter_save/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +9,17 @@ import 'package:flutter_save/repository/options_repository.dart';
 class ParentSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<OptionsBloc>(
-        create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
-        child: SettingsPage());
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<OptionsBloc>(
+            create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
+              ),
+          BlocProvider<PrayerBloc>(
+            create: (BuildContext context) => PrayerBloc(repository: PrayerRepositoryImpl()),
+          ),
+        ],
+        child: SettingsPage()
+              );
   }
 }
 
@@ -22,12 +31,14 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   int selectedRadio;
   OptionsBloc optionsBloc;
+  PrayerBloc prayerBloc;
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    selectedRadio = 0;
+    //selectedRadio = 0;
     optionsBloc = BlocProvider.of<OptionsBloc>(context);
     optionsBloc.add(FetchOptionsEvent());
   }
@@ -56,6 +67,8 @@ class _SettingsPageState extends State<SettingsPage> {
         child: FloatingActionButton(onPressed: () {
           Options save = Options(selectedRadio);
           optionsBloc.add(SaveOptionsEvent(save));
+          prayerBloc = BlocProvider.of<PrayerBloc>(context);
+          prayerBloc.add(FetchPrayerMethodEvent(method: selectedRadio));
           Navigator.pop(context);
         },
           child: Text('Save'),

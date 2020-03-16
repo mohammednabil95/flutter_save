@@ -10,7 +10,6 @@ import 'package:flutter_save/services/presentation/my_flutter_app_icons.dart';
 import 'package:hijri/umm_alqura_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:hijri_picker/hijri_picker.dart';
-import 'package:flutter_save/bloc/calendar_bloc.dart';
 
 class ParentCalendarPage extends StatelessWidget {
   @override
@@ -206,7 +205,6 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 
   Widget singleTimeCard(String timeName, String time, IconData icon, Color color){
-
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -271,14 +269,11 @@ class _CalendarPageState extends State<CalendarPage> {
         ..hDay = 25,
       initialDatePickerMode: DatePickerMode.day,
     );
-
     DateTime date = temp.hijriToGregorian(selectedDate.hYear, selectedDate.hMonth, selectedDate.hDay);
-
     print(picked);
     if (picked != null)
       calendarBloc.add(GetCalendarEvent(date));
   }
-
 
   Future<Null> _selectDateG(BuildContext context) async {
     DateTime today = DateTime.now();

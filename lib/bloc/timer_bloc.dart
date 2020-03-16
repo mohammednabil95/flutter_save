@@ -8,6 +8,7 @@ import 'package:flutter_save/models/ticker.dart';
 class TimerBloc extends Bloc<TimerEvent, TimerState> {
   final Ticker _ticker;
   final int _duration = 10;
+  PrayerBloc prayerBloc;
 
   StreamSubscription<int> _tickerSubscription;
 
@@ -54,11 +55,7 @@ class TimerBloc extends Bloc<TimerEvent, TimerState> {
     if(tick.duration > 0 ){
       yield Running(tick.duration);
     }else{
-      yield Running(tick.duration);
-      _tickerSubscription?.cancel();
-      _tickerSubscription = _ticker
-          .tick(ticks: tick.duration)
-          .listen((duration) => add(Tick(duration: duration)));
+      yield NextP(tick.duration);
     }
   }
 

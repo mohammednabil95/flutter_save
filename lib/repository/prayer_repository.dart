@@ -7,10 +7,11 @@ import 'package:flutter_save/models/Options.dart';
 import 'dart:convert';
 
 import 'package:flutter_save/utilities/file_util.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class PrayerRepository {
-  Future<Timings> getItem();
+  Future<Timings> getItem({int method});
   NextPrayer getNextPrayer(Timings timing);
 }
 
@@ -18,19 +19,19 @@ class PrayerRepositoryImpl implements PrayerRepository {
 
   String fileName = 'prayerdata.json';
   @override
-  Future<Timings> getItem() async {
+  Future<Timings> getItem({int method}) async {
 
     DateTime today = DateTime.now();
     int day = today.day;
     int month = today.month;
     int year = today.year;
-    String rawData;
+    String rawData, location;
     FileUtil fileUtil = new FileUtil(fileName);
     rawData = await fileUtil.readFile();
     var data;
     var resp;
     List<Datum> item;
-    if(rawData == null){   // the file doesn't exist, get from API
+    if(rawData == null || method != null){   // the file doesn't exist, get from API
       resp = await updatePrayerDataFileUsingAPI();
       rawData = resp.body;
       if (resp.statusCode == 200) {
@@ -70,9 +71,7 @@ class PrayerRepositoryImpl implements PrayerRepository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     Options method = Options(prefs.getInt('prayer_method')?? 4);
-    //if(method.selectedMethod == null){
-   //   method.selectedMethod = 4;
-   // }
+    print("************** Prayer method = $method");
     DateTime today = DateTime.now();
     String year = today.year.toString().padLeft(4,'0');
     String month = today.month.toString().padLeft(2,'0');
