@@ -25,15 +25,14 @@ class OptionsBloc extends Bloc<OptionsEvent, OptionsState> {
 
   @override
   Stream<OptionsState> mapEventToState(
-    OptionsEvent event,
-  ) async* {
+      OptionsEvent event,
+      ) async* {
     if (event is FetchOptionsEvent) {
-        Options options = await optionsRepository.getOptions();
-        yield OptionsLoadedState(options: options);
+      Options options = await optionsRepository.getOptions();
+      yield OptionsLoadedState(options: options);
     } else if(event is SaveOptionsEvent ){
-        await optionsRepository.saveOptions(event.options);
-        //prayerBloc.add(fetchPrayerEvent);
-        }
-    }
+      await optionsRepository.saveOptions(event.options);
 
+    }
+  }
 }

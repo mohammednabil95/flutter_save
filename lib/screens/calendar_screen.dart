@@ -58,7 +58,6 @@ class _CalendarPageState extends State<CalendarPage> {
     calendarBloc.add(OpenCalendarEvent());
   }
 
-
   Widget buildErrorUi(String message) {
     return Center(
       child: Padding(
@@ -76,14 +75,8 @@ class _CalendarPageState extends State<CalendarPage> {
       child: CircularProgressIndicator(),
     );
   }
-
   Widget buildCalendar(Timings item) {
-
-
-
     dateFormat = DateFormat('dd-MM-yyyy').format(selectedDateG);
-
-
     return Container(
         child: ListView(
           children: <Widget>[
@@ -269,12 +262,17 @@ class _CalendarPageState extends State<CalendarPage> {
         ..hDay = 25,
       initialDatePickerMode: DatePickerMode.day,
     );
-    DateTime date = temp.hijriToGregorian(selectedDate.hYear, selectedDate.hMonth, selectedDate.hDay);
+
+    DateTime date = temp.hijriToGregorian(picked.hYear, picked.hMonth, picked.hDay);
+
     print(picked);
-    if (picked != null)
+    if (picked != null && picked!=selectedDate){
+   //   setState(() {
+        selectedDate=picked;
+   //   });
+    }
       calendarBloc.add(GetCalendarEvent(date));
   }
-
   Future<Null> _selectDateG(BuildContext context) async {
     DateTime today = DateTime.now();
     final DateTime picked = await showDatePicker(
@@ -283,7 +281,11 @@ class _CalendarPageState extends State<CalendarPage> {
       firstDate: DateTime(2015,8),
       lastDate: DateTime(2101),
     );
-    if (picked != null) {
+    if (picked != null && picked !=selectedDateG) {
+
+   //   setState(() {
+        selectedDateG=picked;
+   //   });
       calendarBloc.add(GetCalendarEvent(picked));
     }
   }

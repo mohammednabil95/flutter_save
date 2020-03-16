@@ -77,6 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+
   Widget buildLoading() {
     return Center(
       child: CircularProgressIndicator(),
@@ -85,25 +86,25 @@ class _SettingsPageState extends State<SettingsPage> {
 }
 
 class BuildList extends StatefulWidget {
+
   Options options;
-
   BuildList({this.options});
-
   @override
   BuildList_State createState() => BuildList_State();
 }
 
 class BuildList_State extends State<BuildList> {
+
+
   OptionsBloc optionsBloc;
   int selectedRadio;
-
-  setSelectedRadio(int val) {
+  setSelectedRadio(int val){
     setState(() {
       selectedRadio = val;
     });
   }
 
-  setSelectecMethod() {
+  setSelectecMethod(){
     setState(() {
       selectedRadio = widget.options.selectedMethod;
     });
@@ -290,6 +291,14 @@ class BuildList_State extends State<BuildList> {
                       print(val);
                       setSelectedRadio(val);
                     }),
+                FloatingActionButton(
+                  onPressed: (){
+                    Options save = Options(selectedRadio);
+
+                    optionsBloc.add(SaveOptionsEvent(save));
+                    Navigator.pop(context);
+                  },
+                )
               ],
             ),
           ],

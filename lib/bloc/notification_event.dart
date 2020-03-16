@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter_save/models/AthanTimes.dart';
 import 'package:flutter_save/models/notification1.dart';
 
 abstract class NotificationEvent extends Equatable {

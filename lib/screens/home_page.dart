@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:easy_localization/easy_localization_delegate.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
 import 'package:flutter_save/bloc/bloc.dart';
 import 'package:flutter_save/bloc/notification_event.dart';
@@ -13,6 +15,7 @@ import 'package:flutter_save/bloc/notification_state.dart';
 import 'package:flutter_save/models/notification1.dart';
 import 'package:flutter_save/services/presentation/my_flutter_app_icons.dart';
 import 'package:hijri/umm_alqura_calendar.dart';
+import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,8 +35,6 @@ class _HomePageState extends State<HomePage> {
   int test;
   String minutesStr, secondsStr, hoursStr;
   TimerBloc timerBloc;
-
-
 
   @override
   void initState() {
@@ -115,6 +116,42 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ],
+                                  ),
+                                ),
+                                BlocBuilder<NotificationBloc, NotificationState>(
+                                    builder: (context, state) {
+                                      if (state is InitialNotificationState) {
+                                        return buildLoading();
+                                      } else if (state is NotificationLoadedState) {
+                                        return NotificationIconBuild(
+                                            state.notification);
+                                      } else if (state is NotificationErrorState) {
+                                        return buildErrorUi(state.message1);
+                                      }
+                                      else if (state is NotificationSavedState) {
+                                        return NotificationIconBuild(
+                                            state.notification);
+                                      }
+                                    },
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      BlocBuilder<PrayerBloc, PrayerState>(
+                          builder: (context, state) {
+                            if (state is PrayerLoadedState) {
+                              return buildprogress(state.nextPrayer);
+                            }
+                            else
+                              return Container();
+                          })
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         Padding(
@@ -284,46 +321,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildArticleList(Timings item) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
-      child: Column(
-       crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          singleTimeCard(AppLocalizations.of(context).tr('Fajr'),
-              formatTime(item.fajr), MyFlutterApp.sunrise, Color(0xFFe5bf07)),
-          singleTimeCard(AppLocalizations.of(context).tr('Dhuhr'),
-              formatTime(item.dhuhr), MyFlutterApp.sun, Color(0xFFe5bf07)),
-          singleTimeCard(AppLocalizations.of(context).tr('Asr'),
-              formatTime(item.asr), MyFlutterApp.sun_inv, Color(0xFFe5bf07)),
-          singleTimeCard(AppLocalizations.of(context).tr('Maghrib'),
-              formatTime(item.maghrib), MyFlutterApp.fog_sun, Color(0xFFe5bf07)),
-          singleTimeCard(AppLocalizations.of(context).tr('Isha'),
-              formatTime(item.isha), MyFlutterApp.fog_moon, Color(0xFF86a4c3)),
-        ],
-      ),
+    return Column(
+     crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        singleTimeCard(AppLocalizations.of(context).tr('Fajr'),
+            formatTime(item.fajr), MyFlutterApp.sunrise, Color(0xFFe5bf07)),
+        singleTimeCard(AppLocalizations.of(context).tr('Dhuhr'),
+            formatTime(item.dhuhr), MyFlutterApp.sun, Color(0xFFe5bf07)),
+        singleTimeCard(AppLocalizations.of(context).tr('Asr'),
+            formatTime(item.asr), MyFlutterApp.sun_inv, Color(0xFFe5bf07)),
+        singleTimeCard(AppLocalizations.of(context).tr('Maghrib'),
+            formatTime(item.maghrib), MyFlutterApp.fog_sun, Color(0xFFe5bf07)),
+        singleTimeCard(AppLocalizations.of(context).tr('Isha'),
+            formatTime(item.isha), MyFlutterApp.fog_moon, Color(0xFF86a4c3)),
+      ],
     );
   }
 
   Widget NotificationIconBuild(NotificationModle notification) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         notificationIcon("fajr", notification),
-        SizedBox(height: 6),
         notificationIcon("duhur", notification),
-        SizedBox(height: 6),
         notificationIcon("asr", notification),
-        SizedBox(height: 6),
         notificationIcon("magrib", notification),
-        SizedBox(height: 6),
         notificationIcon("esha", notification),
       ],
     );
   }
 
-  Widget notificationIcon(String notification, NotificationModle notificationModle) {
+  Widget notificationIcon(
+      String notification, NotificationModle notificationModle) {
     switch (notification) {
       case "fajr":
         {
@@ -337,10 +367,15 @@ class _HomePageState extends State<HomePage> {
             );
           else
             return IconButton(
-              icon: Icon(Icons.notifications_active, color: Color(0xFFe5bf07)),
+              icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.fajr = false;
                   notificationBloc.add(SelectNotificationEvent(notificationModle));
+                  Timings timings=Timings(fajr: test.toString());
+                  List<String> aa=timings.fajr.split(":");
+                  int aab=int.parse(aa[0]);
+                  //notificationBloc.add(OneNotificationEvent(aab);
+
               },
             );
         }
@@ -357,7 +392,7 @@ class _HomePageState extends State<HomePage> {
             );
           else
             return IconButton(
-              icon: Icon(Icons.notifications_active, color: Color(0xFFe5bf07)),
+              icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.duhur = false;
                   notificationBloc.add(SelectNotificationEvent(notificationModle));
@@ -377,7 +412,7 @@ class _HomePageState extends State<HomePage> {
             );
           else
             return IconButton(
-              icon: Icon(Icons.notifications_active, color: Color(0xFFe5bf07)),
+              icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.asr = false;
                 notificationBloc.add(
@@ -399,7 +434,7 @@ class _HomePageState extends State<HomePage> {
             );
           else
             return IconButton(
-              icon: Icon(Icons.notifications_active, color: Color(0xFFe5bf07)),
+              icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.magrib = false;
                   notificationBloc.add(SelectNotificationEvent(notificationModle));
@@ -420,7 +455,7 @@ class _HomePageState extends State<HomePage> {
             );
           else
             return IconButton(
-              icon: Icon(Icons.notifications_active, color: Color(0xFFe5bf07)),
+              icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.esha = false;
                   notificationBloc.add(SelectNotificationEvent(notificationModle));
@@ -569,25 +604,20 @@ Widget singleTimeCard(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Icon(
-              icon,
-              color: color,
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              timeName,
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
+        Icon(
+          icon,
+          color: color,
         ),
-
+        SizedBox(
+          width: 10,
+        ),
+        Text(
+          timeName,
+          style: TextStyle(
+              fontSize: 20,
+              color: Colors.black54,
+              fontWeight: FontWeight.bold),
+        ),
         SizedBox(
           width: 10,
         ),

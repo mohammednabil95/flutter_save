@@ -135,14 +135,21 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
             child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
-                leading: Image(image: AssetImage("assets/SalawatLogoIcon1.png"),),
-              primary: true,
-                //automaticallyImplyLeading: false,
-                title:
-                   Text(
-                     AppLocalizations.of(context).tr('Salah Times'),
-                    style: TextStyle(color: Colors.white ,fontSize: 18, fontWeight: FontWeight.normal),
-                   ),
+                automaticallyImplyLeading: false,
+                title: Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: new Image.asset("assets/SalawatLogoIcon1.png",fit: BoxFit.contain,),
+                      iconSize: 50.0,
+                    ),
+                    //Image(image: AssetImage("assets/SalawatLogoIcon1.png"), fit: BoxFit.contain,),
+                    Padding(padding: EdgeInsets.all(1)),
+                    Text(
+                      AppLocalizations.of(context).tr('Salah Times'),
+                      style: TextStyle(color: Colors.white ,fontSize: 18, fontWeight: FontWeight.normal),),
+                  ],
+                ),
+
                 backgroundColor: Colors.black38,
                 elevation: 0,
               actions: <Widget>[
