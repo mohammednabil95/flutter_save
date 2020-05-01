@@ -6,7 +6,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class NotificationsRepository {
   Future<NotificationModle> getNotifications();
   Future<void> saveNotifications(NotificationModle notification);
-  Future<void> getNotify(Timings timings);
 
 }
 
@@ -35,20 +34,5 @@ class NotificationsRepositoryImp implements NotificationsRepository {
     await prefs.setBool('n_asr', notification.asr);
     await prefs.setBool('n_magrib', notification.magrib);
     await prefs.setBool('n_esha', notification.esha);
-  }
-
-  @override
-  Future<void> getNotify(Timings timings) async{
-    List<String> arr = timings.fajr.split(':');
-    int aa = int.parse(arr[0]);
-    //int bb = int.parse(arr[1]);
-    print(aa);
-    var time = new Time(aa, 40, 0);
-    var android = new AndroidNotificationDetails(
-      'Channel Id', 'Channel Name', 'Channel Des',);
-    var iOS = new IOSNotificationDetails();
-    var platform = new NotificationDetails(android, iOS);
-    flutterLocalNotificationsPlugin.showDailyAtTime(0, 'show daily title',
-        'Daily notification shown at approximately', time, platform);
   }
 }

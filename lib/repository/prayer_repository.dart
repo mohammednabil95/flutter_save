@@ -25,13 +25,13 @@ class PrayerRepositoryImpl implements PrayerRepository {
     int day = today.day;
     int month = today.month;
     int year = today.year;
-    String rawData, location;
+    String rawData;
     FileUtil fileUtil = new FileUtil(fileName);
     rawData = await fileUtil.readFile();
     var data;
     var resp;
     List<Datum> item;
-    if(rawData == null || method != null){   // the file doesn't exist, get from API
+    if(rawData == null || method != null){
       resp = await updatePrayerDataFileUsingAPI();
       rawData = resp.body;
       if (resp.statusCode == 200) {
@@ -40,7 +40,7 @@ class PrayerRepositoryImpl implements PrayerRepository {
       }else {
         throw Exception();
       }
-    }else{  // the file exists
+    }else{
       data = json.decode(rawData);
       item = AthanTime.fromJson(data).data;
       if(item[0].date.gregorian.month.number != month || int.parse(item[0].date.gregorian.year) != year){ // if not the same month or year

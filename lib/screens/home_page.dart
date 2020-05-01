@@ -34,10 +34,12 @@ class _HomePageState extends State<HomePage> {
   int dateDay;
   int test;
   String minutesStr, secondsStr, hoursStr;
+
   TimerBloc timerBloc;
 
   @override
   void initState() {
+
     notificationBloc = BlocProvider.of<NotificationBloc>(context);
     prayerBloc = BlocProvider.of<PrayerBloc>(context);
     prayerBloc.add(FetchPrayerEvent());
@@ -53,24 +55,29 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(top: 40.0),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-                child: Stack(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 70.0),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        elevation: 10.0,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 60.0, bottom: 20, left: 20, right: 20),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                               Expanded(
+          child: Container(
+            height: 420.0,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  child: Stack(
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(top: 70.0),
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20)),
+                          elevation: 10.0,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 50.0, bottom: 10, left: 10, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.max,
+
+                              children: <Widget>[
+                                Center(
                                   child: BlocBuilder<PrayerBloc, PrayerState>(
                                     builder: (context, state) {
                                       if (state is InitialPrayerState) {
@@ -85,9 +92,9 @@ class _HomePageState extends State<HomePage> {
                                       }
                                     },
 
+                                  ),
                                 ),
-                              ),
-                              BlocBuilder<NotificationBloc, NotificationState>(
+                                BlocBuilder<NotificationBloc, NotificationState>(
                                   builder: (context, state) {
                                     if (state is InitialNotificationState) {
                                       return buildLoading();
@@ -97,43 +104,12 @@ class _HomePageState extends State<HomePage> {
                                     } else if (state is NotificationErrorState) {
                                       return buildErrorUi(state.message1);
                                     }
+                                    else if (state is NotificationSavedState) {
+                                      return NotificationIconBuild(
+                                          state.notification);
+                                    }
                                   },
                                 ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    BlocBuilder<PrayerBloc, PrayerState>(
-                        builder: (context, state) {
-                          if (state is PrayerLoadedState) {
-                            return buildprogress(state.nextPrayer);
-                          }
-                          else
-                            return Container();
-                        })
-                  ],
-                ),
-              ),
-            ], // khkj
-                                  ),
-                                ),
-                                BlocBuilder<NotificationBloc, NotificationState>(
-                                    builder: (context, state) {
-                                      if (state is InitialNotificationState) {
-                                        return buildLoading();
-                                      } else if (state is NotificationLoadedState) {
-                                        return NotificationIconBuild(
-                                            state.notification);
-                                      } else if (state is NotificationErrorState) {
-                                        return buildErrorUi(state.message1);
-                                      }
-                                      else if (state is NotificationSavedState) {
-                                        return NotificationIconBuild(
-                                            state.notification);
-                                      }
-                                    },
-                                  ),
                               ],
                             ),
                           ),
@@ -238,16 +214,16 @@ class _HomePageState extends State<HomePage> {
                         CircularStackEntry>[
                       new CircularStackEntry(
                         <CircularSegmentEntry>[
-                            new CircularSegmentEntry(
-                              100 - nextPrayer.percent,
-                              Color(0xFFd4a554),
-                              rankKey: 'completed',
-                            ),
-                            new CircularSegmentEntry(
-                             nextPrayer.percent,
-                              Color(0xFF614729),
-                              rankKey: 'completed',
-                            ),
+                          new CircularSegmentEntry(
+                            100 - nextPrayer.percent,
+                            Color(0xFFd4a554),
+                            rankKey: 'completed',
+                          ),
+                          new CircularSegmentEntry(
+                            nextPrayer.percent,
+                            Color(0xFF614729),
+                            rankKey: 'completed',
+                          ),
                         ],
                         rankKey: 'progress',
                       ),
@@ -265,33 +241,27 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
 
-              BlocBuilder<TimerBloc, TimerState> (
-                builder: (context,state) {
-                  if(state is Running ) {
-                    hoursStr = ((state.duration / 60 / 60) % 12)
-                        .floor()
-                        .toString();
-                        //.padLeft(2,'0');
-                    minutesStr = ((state.duration / 60) % 60)
-                        .floor()
-                        .toString()
-                        .padLeft(2,'0');
-                    secondsStr = (state.duration % 60)
-                        .floor()
-                        .toString()
-                        .padLeft(2,'0');
-                    return Center(
-                      child: Text(
-                        '$hoursStr:$minutesStr:$secondsStr',style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }else  if(state is NextP ) {
-                    prayerBloc = BlocProvider.of<PrayerBloc>(context);
-                    prayerBloc.add(FetchPrayerEvent());
-                    return Container();
-                  }
-                }
-              ),// Center(child: new CountDownTimer(data: data))
+                  BlocBuilder<TimerBloc, TimerState> (
+                    builder: (context,state) {
+                      hoursStr = ((state.duration / 60 / 60) % 12)
+                          .floor()
+                          .toString();
+                      //.padLeft(2,'0');
+                      minutesStr = ((state.duration / 60) % 60)
+                          .floor()
+                          .toString()
+                          .padLeft(2,'0');
+                      secondsStr = (state.duration % 60)
+                          .floor()
+                          .toString()
+                          .padLeft(2,'0');
+                      return Center(
+                        child: Text(
+                          '$hoursStr:$minutesStr:$secondsStr',style: TextStyle(color: Colors.white),
+                        ),
+                      );
+                    },
+                  ),// Center(child: new CountDownTimer(data: data))
                 ],
               ),
             ],
@@ -322,7 +292,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildArticleList(Timings item) {
     return Column(
-     crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         singleTimeCard(AppLocalizations.of(context).tr('Fajr'),
@@ -370,11 +340,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.fajr = false;
-                  notificationBloc.add(SelectNotificationEvent(notificationModle));
-                  Timings timings=Timings(fajr: test.toString());
-                  List<String> aa=timings.fajr.split(":");
-                  int aab=int.parse(aa[0]);
-                  //notificationBloc.add(OneNotificationEvent(aab);
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
 
               },
             );
@@ -387,7 +353,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.duhur = true;
-                  notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
@@ -395,7 +361,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.duhur = false;
-                  notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
         }
@@ -407,17 +373,17 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.asr = true;
-                  notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
             return IconButton(
-              icon: Icon(Icons.notifications_active),
-              onPressed: () {
-                notificationModle.asr = false;
-                notificationBloc.add(
-                    SelectNotificationEvent(notificationModle));
-              }
+                icon: Icon(Icons.notifications_active),
+                onPressed: () {
+                  notificationModle.asr = false;
+                  notificationBloc.add(
+                      SelectNotificationEvent(notificationModle));
+                }
             );
         }
         break;
@@ -429,7 +395,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.magrib = true;
-                  notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
@@ -437,7 +403,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.magrib = false;
-                  notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
         }
@@ -450,7 +416,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModle.esha = true;
-                  notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
           else
@@ -458,7 +424,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 notificationModle.esha = false;
-                  notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationBloc.add(SelectNotificationEvent(notificationModle));
               },
             );
         }

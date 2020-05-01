@@ -126,7 +126,7 @@ class Gregorian {
 
 class Designation {
   Abbreviated abbreviated;
-  Expanded1 expanded;
+  Expanded expanded;
 
   Designation({
     this.abbreviated,
@@ -151,11 +151,11 @@ final abbreviatedValues = EnumValues({
   "AH": Abbreviated.AH
 });
 
-enum Expanded1 { ANNO_DOMINI, ANNO_HEGIRAE }
+enum Expanded { ANNO_DOMINI, ANNO_HEGIRAE }
 
 final expandedValues = EnumValues({
-  "Anno Domini": Expanded1.ANNO_DOMINI,
-  "Anno Hegirae": Expanded1.ANNO_HEGIRAE
+  "Anno Domini": Expanded.ANNO_DOMINI,
+  "Anno Hegirae": Expanded.ANNO_HEGIRAE
 });
 
 enum Format { DD_MM_YYYY }
@@ -184,10 +184,10 @@ class GregorianMonth {
   };
 }
 
-enum PurpleEn { DECEMBER }
+enum PurpleEn { MAY }
 
 final purpleEnValues = EnumValues({
-  "December": PurpleEn.DECEMBER
+  "May": PurpleEn.MAY
 });
 
 class GregorianWeekday {
@@ -214,7 +214,7 @@ class Hijri {
   HijriMonth month;
   String year;
   Designation designation;
-  List<dynamic> holidays;
+  List<String> holidays;
 
   Hijri({
     this.date,
@@ -235,7 +235,7 @@ class Hijri {
     month: HijriMonth.fromJson(json["month"]),
     year: json["year"],
     designation: Designation.fromJson(json["designation"]),
-    holidays: List<dynamic>.from(json["holidays"].map((x) => x)),
+    holidays: List<String>.from(json["holidays"].map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
@@ -277,15 +277,15 @@ class HijriMonth {
 enum Ar { EMPTY, AR }
 
 final arValues = EnumValues({
-  "جُمادى الأولى": Ar.AR,
-  "رَبيع الثاني": Ar.EMPTY
+  "شَوّال": Ar.AR,
+  "رَمَضان": Ar.EMPTY
 });
 
-enum FluffyEn { RAB_AL_THN, JUMD_AL_L }
+enum FluffyEn { RAMAN, SHAWWL }
 
 final fluffyEnValues = EnumValues({
-  "Jumādá al-ūlá": FluffyEn.JUMD_AL_L,
-  "Rabīʿ al-thānī": FluffyEn.RAB_AL_THN
+  "Ramaḍān": FluffyEn.RAMAN,
+  "Shawwāl": FluffyEn.SHAWWL
 });
 
 class HijriWeekday {
@@ -316,7 +316,7 @@ class Meta {
   LatitudeAdjustmentMethod latitudeAdjustmentMethod;
   MidnightMode midnightMode;
   MidnightMode school;
-  Map<String, int> offset;
+  Offset offset;
 
   Meta({
     this.latitude,
@@ -333,11 +333,11 @@ class Meta {
     latitude: json["latitude"].toDouble(),
     longitude: json["longitude"].toDouble(),
     timezone: timezoneValues.map[json["timezone"]],
-    //method: Method.fromJson(json["method"]),
+    method: Method.fromJson(json["method"]),
     latitudeAdjustmentMethod: latitudeAdjustmentMethodValues.map[json["latitudeAdjustmentMethod"]],
     midnightMode: midnightModeValues.map[json["midnightMode"]],
     school: midnightModeValues.map[json["school"]],
-    offset: Map.from(json["offset"]).map((k, v) => MapEntry<String, int>(k, v)),
+    offset: Offset.fromJson(json["offset"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -348,7 +348,7 @@ class Meta {
     "latitudeAdjustmentMethod": latitudeAdjustmentMethodValues.reverse[latitudeAdjustmentMethod],
     "midnightMode": midnightModeValues.reverse[midnightMode],
     "school": midnightModeValues.reverse[school],
-    "offset": Map.from(offset).map((k, v) => MapEntry<String, dynamic>(k, v)),
+    "offset": offset.toJson(),
   };
 }
 
@@ -382,15 +382,15 @@ class Method {
   };
 }
 
-enum Name { UNIVERSITY_OF_ISLAMIC_SCIENCES_KARACHI }
+enum Name { UMM_AL_QURA_UNIVERSITY_MAKKAH }
 
 final nameValues = EnumValues({
-  "University of Islamic Sciences, Karachi": Name.UNIVERSITY_OF_ISLAMIC_SCIENCES_KARACHI
+  "Umm Al-Qura University, Makkah": Name.UMM_AL_QURA_UNIVERSITY_MAKKAH
 });
 
 class Params {
-  int fajr;
-  int isha;
+  double fajr;
+  ParamsIsha isha;
 
   Params({
     this.fajr,
@@ -398,15 +398,21 @@ class Params {
   });
 
   factory Params.fromJson(Map<String, dynamic> json) => Params(
-    fajr: json["Fajr"],
-    isha: json["Isha"],
+    fajr: json["Fajr"].toDouble(),
+    isha: paramsIshaValues.map[json["Isha"]],
   );
 
   Map<String, dynamic> toJson() => {
     "Fajr": fajr,
-    "Isha": isha,
+    "Isha": paramsIshaValues.reverse[isha],
   };
 }
+
+enum ParamsIsha { THE_90_MIN }
+
+final paramsIshaValues = EnumValues({
+  "90 min": ParamsIsha.THE_90_MIN
+});
 
 enum MidnightMode { STANDARD }
 
@@ -414,10 +420,64 @@ final midnightModeValues = EnumValues({
   "STANDARD": MidnightMode.STANDARD
 });
 
-enum Timezone { ASIA_RIYADH }
+class Offset {
+  int imsak;
+  int fajr;
+  int sunrise;
+  int dhuhr;
+  int asr;
+  int maghrib;
+  int sunset;
+  dynamic isha;
+  int midnight;
+
+  Offset({
+    this.imsak,
+    this.fajr,
+    this.sunrise,
+    this.dhuhr,
+    this.asr,
+    this.maghrib,
+    this.sunset,
+    this.isha,
+    this.midnight,
+  });
+
+  factory Offset.fromJson(Map<String, dynamic> json) => Offset(
+    imsak: json["Imsak"],
+    fajr: json["Fajr"],
+    sunrise: json["Sunrise"],
+    dhuhr: json["Dhuhr"],
+    asr: json["Asr"],
+    maghrib: json["Maghrib"],
+    sunset: json["Sunset"],
+    isha: json["Isha"],
+    midnight: json["Midnight"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "Imsak": imsak,
+    "Fajr": fajr,
+    "Sunrise": sunrise,
+    "Dhuhr": dhuhr,
+    "Asr": asr,
+    "Maghrib": maghrib,
+    "Sunset": sunset,
+    "Isha": isha,
+    "Midnight": midnight,
+  };
+}
+
+enum IshaIsha { THE_30_MIN }
+
+final ishaIshaValues = EnumValues({
+  "30 min": IshaIsha.THE_30_MIN
+});
+
+enum Timezone { EUROPE_LONDON }
 
 final timezoneValues = EnumValues({
-  "Asia/Riyadh": Timezone.ASIA_RIYADH
+  "Europe/London": Timezone.EUROPE_LONDON
 });
 
 class Timings {
@@ -429,7 +489,7 @@ class Timings {
   String maghrib;
   String isha;
   String imsak;
-  String midnight;
+  Midnight midnight;
 
   Timings({
     this.fajr,
@@ -452,21 +512,36 @@ class Timings {
     maghrib: json["Maghrib"],
     isha: json["Isha"],
     imsak: json["Imsak"],
-    midnight: json["Midnight"],
+    midnight: midnightValues.map[json["Midnight"]],
   );
 
   Map<String, dynamic> toJson() => {
     "Fajr": fajr,
     "Sunrise": sunrise,
-    "Dhuhr": dhuhr,
+    "Dhuhr": dhuhrValues.reverse[dhuhr],
     "Asr": asr,
     "Sunset": sunset,
     "Maghrib": maghrib,
     "Isha": isha,
     "Imsak": imsak,
-    "Midnight": midnight,
+    "Midnight": midnightValues.reverse[midnight],
   };
 }
+
+enum Dhuhr { THE_1258_BST, THE_1257_BST }
+
+final dhuhrValues = EnumValues({
+  "12:57 (BST)": Dhuhr.THE_1257_BST,
+  "12:58 (BST)": Dhuhr.THE_1258_BST
+});
+
+enum Midnight { THE_0058_BST, THE_0057_BST, THE_0059_BST }
+
+final midnightValues = EnumValues({
+  "00:57 (BST)": Midnight.THE_0057_BST,
+  "00:58 (BST)": Midnight.THE_0058_BST,
+  "00:59 (BST)": Midnight.THE_0059_BST
+});
 
 class EnumValues<T> {
   Map<String, T> map;
@@ -481,6 +556,7 @@ class EnumValues<T> {
     return reverseMap;
   }
 }
+
 
 class NextPrayer {
   String prayerName;
