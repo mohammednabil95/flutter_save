@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_save/models/Options.dart';
 import 'package:flutter_save/repository/options_repository.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ParentSettingsPage extends StatelessWidget {
   @override
@@ -78,6 +79,8 @@ class BuildList extends StatefulWidget {
 }
 
 class _BuildListState extends State<BuildList> {
+  final GlobalKey<ScaffoldState> _scaffoldKey=new GlobalKey<ScaffoldState>();
+  bool isLocationEnabled=true;
   OptionsBloc optionsBloc;
   int selectedRadio;
   setSelectedRadio(int val){
@@ -101,192 +104,207 @@ class _BuildListState extends State<BuildList> {
     print(widget.options.selectedMethod);
   }
 
+  void _showSnackBar() {
+    final snackBar=new SnackBar(content: new Text('Please enable the location'));
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: <Widget>[
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(15.0),
-              child: Text(
-                "Prayer Methods",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    return Scaffold(
+      key: _scaffoldKey,
+      body: ListView(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(15.0),
+                child: Text(
+                  "Prayer Methods",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-            Column(
-              children: <Widget>[
-                RadioListTile(
-                    value: 4,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Umm Al-Qura University, Makkah ",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 1,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "University of Islamic Sciences, Karachi",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 2,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Islamic Society of North America",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 3,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "	Muslim World League ",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 5,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Egyptian General Authority of Survey",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 7,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Institute of Geophysics, University of Tehran",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 8,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Gulf Region",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 9,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Kuwait",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 10,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Qatar",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 11,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Majlis Ugama Islam Singapura, Singapore",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 12,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Union Organization islamic de France",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 13,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Diyanet İşleri Başkanlığı, Turkey",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 14,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Spiritual Administration of Muslims of Russia",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                RadioListTile(
-                    value: 0,
-                    groupValue: selectedRadio,
-                    activeColor: Colors.black,
-                    title: Text(
-                      "Ithna-Ansari",
-                    ),
-                    onChanged: (val) {
-                      print(val);
-                      setSelectedRadio(val);
-                    }),
-                PlatformButton(
-                  child: Text('Save'),
-                  onPressed: (){
-                    Options save = Options(selectedRadio);
-                    optionsBloc.add(SaveOptionsEvent(save));
-                    // ignore: close_sinks
-                    PrayerBloc prayerBloc = BlocProvider.of<PrayerBloc>(context);
-                    prayerBloc.add(FetchPrayerMethodEvent(method: selectedRadio));
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-            ),
-          ],
-        ),
-      ],
+              Column(
+                children: <Widget>[
+                  RadioListTile(
+                      value: 4,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Umm Al-Qura University, Makkah ",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 1,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "University of Islamic Sciences, Karachi",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 2,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Islamic Society of North America",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 3,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "	Muslim World League ",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 5,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Egyptian General Authority of Survey",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 7,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Institute of Geophysics, University of Tehran",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 8,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Gulf Region",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 9,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Kuwait",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 10,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Qatar",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 11,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Majlis Ugama Islam Singapura, Singapore",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 12,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Union Organization islamic de France",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 13,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Diyanet İşleri Başkanlığı, Turkey",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 14,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Spiritual Administration of Muslims of Russia",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  RadioListTile(
+                      value: 0,
+                      groupValue: selectedRadio,
+                      activeColor: Colors.black,
+                      title: Text(
+                        "Ithna-Ansari",
+                      ),
+                      onChanged: (val) {
+                        print(val);
+                        setSelectedRadio(val);
+                      }),
+                  PlatformButton(
+                    child: Text('Save'),
+                    onPressed: () async {
+                      isLocationEnabled = await Geolocator().isLocationServiceEnabled();
+                      if(isLocationEnabled==true){
+                        print('yes');
+                        Options save = Options(selectedRadio);
+                        optionsBloc.add(SaveOptionsEvent(save));
+                        // ignore: close_sinks
+                        PrayerBloc prayerBloc = BlocProvider.of<PrayerBloc>(context);
+                        prayerBloc.add(FetchPrayerMethodEvent(method: selectedRadio));
+                        Navigator.pop(context);
+                      }else{
+                        print('no');
+                        _showSnackBar();
+                      }
+                    },
+                  )
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
