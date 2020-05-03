@@ -19,7 +19,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> mapEventToState(NotificationEvent event,) async* {
     if (event is FetchNotificationEvent) {
       try {
-        NotificationModle notification = await notificationsRepository.getNotifications();
+        NotificationModel notification = await notificationsRepository.getNotifications();
         yield NotificationLoadedState(notification: notification);
       }
       catch (e) {
@@ -29,7 +29,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     else if (event is SelectNotificationEvent) {
       try {
         await notificationsRepository.saveNotifications(event.notificationModle);
-        NotificationModle notification = await notificationsRepository.getNotifications();
+        NotificationModel notification = await notificationsRepository.getNotifications();
         yield NotificationLoadedState(notification: notification);
         //yield NotificationSavedState(notification: event.notificationModle);
       }

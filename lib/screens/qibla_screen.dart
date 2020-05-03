@@ -60,7 +60,6 @@ class _QiblaScreenState extends State<QiblaScreen> {
         if (snapshot.hasError) {
           return Text('Error reading heading: ${snapshot.error}');
         }
-
         if (!snapshot.hasData || _foundLocation == false ) {
           return Center(
             child: Container(
@@ -103,7 +102,6 @@ class _QiblaScreenState extends State<QiblaScreen> {
             child: Text('Open App Settings'),
             onPressed: () {
               PermissionHandler().openAppSettings().then((opened) {
-                //
               });
             },
           )
@@ -131,22 +129,16 @@ class _QiblaScreenState extends State<QiblaScreen> {
 
   //get degrees needed to rotate the compass to qibla direction based on current location
   Future<double> getDegreesToQibla() async{
-
     _position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.low);
-
     print('getDegreesToQibla: calculating degrees to Qibla...');
     //Qibla coordinates:
     double latQibla = 39.83;
     double longQibla = 21.53;
-
 //    double latQibla = 21.422487;
 //    double longQibla = 39.826206;
-
     double dLon = radians(longQibla-_position.longitude);
-
     double lat = radians(_position.latitude);
     latQibla = radians(latQibla);
-
     double y = sin(dLon) * cos(latQibla);
     double x = cos(lat)*sin(latQibla) -
         sin(lat)*cos(latQibla)*cos(dLon);

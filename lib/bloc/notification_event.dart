@@ -14,7 +14,7 @@ class FetchNotificationEvent extends NotificationEvent {
 
 class SelectNotificationEvent extends NotificationEvent {
 
-  NotificationModle notificationModle;
+  NotificationModel notificationModle;
 
   SelectNotificationEvent(this.notificationModle);
 

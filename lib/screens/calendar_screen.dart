@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_save/bloc/calendar_bloc.dart';
 import 'package:flutter_save/bloc/calendar_event.dart';
 import 'package:flutter_save/bloc/calendar_state.dart';
@@ -47,6 +48,7 @@ class _CalendarPageState extends State<CalendarPage> {
           else if (state is CalendarErrorState) {
             return buildErrorUi(state.message1);
           }
+          return null;
         },
       ),
     );
@@ -72,7 +74,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   Widget buildLoading() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: PlatformCircularProgressIndicator(),
     );
   }
   Widget buildCalendar(Timings item) {
@@ -262,17 +264,14 @@ class _CalendarPageState extends State<CalendarPage> {
         ..hDay = 25,
       initialDatePickerMode: DatePickerMode.day,
     );
-
     DateTime date = temp.hijriToGregorian(picked.hYear, picked.hMonth, picked.hDay);
-
     print(picked);
     if (picked != null && picked!=selectedDate){
-   //   setState(() {
         selectedDate=picked;
-   //   });
     }
       calendarBloc.add(GetCalendarEvent(date));
   }
+
   Future<Null> _selectDateG(BuildContext context) async {
     DateTime today = DateTime.now();
     final DateTime picked = await showDatePicker(
@@ -282,10 +281,7 @@ class _CalendarPageState extends State<CalendarPage> {
       lastDate: DateTime(2101),
     );
     if (picked != null && picked !=selectedDateG) {
-
-   //   setState(() {
         selectedDateG=picked;
-   //   });
       calendarBloc.add(GetCalendarEvent(picked));
     }
   }

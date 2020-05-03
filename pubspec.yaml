@@ -34,7 +34,7 @@ dependencies:
   google_maps_flutter: ^0.5.7
   google_maps_webservice: ^0.0.13
   flutter_compass: ^0.2.0
-
+  flutter_platform_widgets: ^0.32.5
   align_positioned: ^1.0.7
   flutter_calendar: ^0.0.1
   intl: ^0.16.0

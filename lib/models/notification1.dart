@@ -1,5 +1,5 @@
 
-class NotificationModle{
+class NotificationModel{
   bool fajr, duhur, asr, magrib, esha;
-  NotificationModle(this.fajr,this.duhur,this.asr,this.magrib,this.esha);
+  NotificationModel(this.fajr,this.duhur,this.asr,this.magrib,this.esha);
 }

@@ -1,12 +1,10 @@
 import 'package:easy_localization/easy_localization_delegate.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_save/location/location.dart';
-
-
-
 
 class MapsScreen extends StatefulWidget {
   @override
@@ -15,19 +13,14 @@ class MapsScreen extends StatefulWidget {
 
 class _MapsScreenState extends State<MapsScreen> {
   GoogleMapController _controller;
-
   DeviceLocation currentLocation = new DeviceLocation();
   LatLng _center;
   List<PlacesSearchResult> places = [];
   bool isLoading = false;
-
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   MarkerId selectedMarker;
   int _markerIdCounter = 1;
-
   Position _position;
-
-
   static const kGoogleApiKey = "AIzaSyChUH0wzLip9yk6iM4aCsQJeNZ10SR0UBU";
   GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: kGoogleApiKey);
 
@@ -36,17 +29,11 @@ class _MapsScreenState extends State<MapsScreen> {
   }
 
   void getNearbyPlaces() async {
-
     final int markerCount = markers.length;
-
     String markerIdVal = 'Mosque_$_markerIdCounter';
     _markerIdCounter++;
     MarkerId markerId = MarkerId(markerIdVal);
-
-
     PlacesSearchResponse result = await _places.searchNearbyWithRadius(Location(_position.latitude, _position.longitude), 1500, type: "mosque");
-
-
     setState(() {
       this.isLoading = false;
       if (result.status == "OK") {
@@ -130,6 +117,6 @@ class _MapsScreenState extends State<MapsScreen> {
           ),
       );
     }
-    else return Center(child: CircularProgressIndicator());
+    else return Center(child: PlatformCircularProgressIndicator());
   }
 }

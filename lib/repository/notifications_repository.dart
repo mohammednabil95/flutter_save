@@ -4,8 +4,8 @@ import 'package:flutter_save/models/notification1.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class NotificationsRepository {
-  Future<NotificationModle> getNotifications();
-  Future<void> saveNotifications(NotificationModle notification);
+  Future<NotificationModel> getNotifications();
+  Future<void> saveNotifications(NotificationModel notification);
 
 }
 
@@ -13,8 +13,8 @@ class NotificationsRepositoryImp implements NotificationsRepository {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
-  Future<NotificationModle> getNotifications() async {
-    NotificationModle notification=NotificationModle(false,false,false,false,false);
+  Future<NotificationModel> getNotifications() async {
+    NotificationModel notification=NotificationModel(false,false,false,false,false);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -26,7 +26,7 @@ class NotificationsRepositoryImp implements NotificationsRepository {
     return notification;
   }
   @override
-  Future<void> saveNotifications(NotificationModle notification) async {
+  Future<void> saveNotifications(NotificationModel notification) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     await prefs.setBool('n_fajr', notification.fajr);

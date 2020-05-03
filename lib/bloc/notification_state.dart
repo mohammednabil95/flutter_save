@@ -14,7 +14,7 @@ class InitialNotificationState extends NotificationState {
 
 class NotificationLoadedState extends NotificationState {
 
-  NotificationModle notification;
+  NotificationModel notification;
   NotificationLoadedState({@required this.notification});
 
   @override
@@ -24,7 +24,7 @@ class NotificationLoadedState extends NotificationState {
 
 class NotificationSavedState extends NotificationState {
 
-  NotificationModle notification;
+  NotificationModel notification;
   NotificationSavedState({@required this.notification});
 
   @override

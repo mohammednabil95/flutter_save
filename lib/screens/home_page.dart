@@ -1,7 +1,7 @@
-
 import 'package:easy_localization/easy_localization_delegate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_save/bloc/bloc.dart';
 import 'package:flutter_save/bloc/notification_event.dart';
 import 'package:flutter_save/bloc/prayer_bloc.dart';
@@ -74,19 +74,25 @@ class _HomePageState extends State<HomePage> {
                               mainAxisSize: MainAxisSize.max,
                               children: <Widget>[
                                 Center(
-                                  child: BlocBuilder<PrayerBloc, PrayerState>(
-                                    builder: (context, state) {
-                                      if (state is InitialPrayerState) {
-                                        return buildLoading();
-                                      } else if (state is PrayerLoadedState) {
-                                        timerBloc = BlocProvider.of<TimerBloc>(context);
-                                        timerBloc.add(Start(duration: state.nextPrayer.duration.inSeconds));
-                                        return buildArticleList(state.item);
-                                      } else if (state is PrayerErrorState) {
-                                        return buildErrorUi(state.message1);
-                                      }
-                                    },
-
+                                  child: Container(
+                                    child: BlocListener<PrayerBloc,PrayerState>(
+                                      listener: (context,state){},
+                                      child: BlocBuilder<PrayerBloc, PrayerState>(
+                                        builder: (context, state) {
+                                          if (state is InitialPrayerState) {
+                                            return buildLoading();
+                                          } else if (state is PrayerLoadedState) {
+                                            timerBloc = BlocProvider.of<TimerBloc>(context);
+                                            timerBloc.add(Start(duration: state.nextPrayer.duration.inSeconds));
+                                            prayerBloc.add(FetchPrayerMethodEvent());
+                                            return buildArticleList(state.item);
+                                          }else if (state is PrayerErrorState) {
+                                            return buildErrorUi(state.message1);
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 BlocBuilder<NotificationBloc, NotificationState>(
@@ -94,12 +100,13 @@ class _HomePageState extends State<HomePage> {
                                     if (state is InitialNotificationState) {
                                       return buildLoading();
                                     } else if (state is NotificationLoadedState) {
-                                      return NotificationIconBuild(state.notification);
+                                      return notificationIconBuild(state.notification);
                                     } else if (state is NotificationErrorState) {
                                       return buildErrorUi(state.message1);
                                     } else if (state is NotificationSavedState) {
-                                      return NotificationIconBuild(state.notification);
+                                      return notificationIconBuild(state.notification);
                                     }
+                                    return null;
                                   },
                                 ),
                               ],
@@ -110,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                       BlocBuilder<PrayerBloc, PrayerState>(
                           builder: (context, state) {
                             if (state is PrayerLoadedState) {
-                              return buildprogress(state.nextPrayer);
+                              return buildProgress(state.nextPrayer);
                             }
                             else {
                               return Container();
@@ -151,6 +158,7 @@ class _HomePageState extends State<HomePage> {
                     } else if (state is PrayerErrorState) {
                       return buildErrorUi(state.message1);
                     }
+                    return null;
                   },
                 ),
               ),
@@ -161,7 +169,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Padding buildprogress(NextPrayer nextPrayer) {
+  Padding buildProgress(NextPrayer nextPrayer) {
     return Padding(
       padding: const EdgeInsets.symmetric(
           horizontal: 50),
@@ -266,7 +274,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildLoading() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: PlatformCircularProgressIndicator(),
     );
   }
 
@@ -301,7 +309,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget NotificationIconBuild(NotificationModle notification) {
+  Widget notificationIconBuild(NotificationModel notification) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -315,24 +323,30 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget notificationIcon(
-      String notification, NotificationModle notificationModle) {
+      String notification, NotificationModel notificationModel) {
     switch (notification) {
       case "fajr":
         {
-          if (notificationModle.fajr == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
+          if (notificationModel.fajr == false)
+            return PlatformIconButton(
+                iosIcon: Icon(
+                  CupertinoIcons.bell,
+                ),
+                androidIcon: Icon(Icons.notifications),
               onPressed: () {
-                notificationModle.fajr = true;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.fajr = true;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
               },
             );
           else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
+            return PlatformIconButton(
+              iosIcon: Icon(
+                CupertinoIcons.bell_solid,
+              ),
+              androidIcon: Icon(Icons.notifications_active),
               onPressed: () {
-                notificationModle.fajr = false;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.fajr = false;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
 
               },
             );
@@ -340,41 +354,53 @@ class _HomePageState extends State<HomePage> {
         break;
       case "duhur":
         {
-          if (notificationModle.duhur == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
+          if (notificationModel.duhur == false)
+            return PlatformIconButton(
+              iosIcon: Icon(
+                CupertinoIcons.bell,
+              ),
+              androidIcon: Icon(Icons.notifications),
               onPressed: () {
-                notificationModle.duhur = true;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.duhur = true;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
               },
             );
           else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
+            return PlatformIconButton(
+              iosIcon: Icon(
+                CupertinoIcons.bell_solid,
+              ),
+              androidIcon: Icon(Icons.notifications_active),
               onPressed: () {
-                notificationModle.duhur = false;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.duhur = false;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
               },
             );
         }
         break;
       case "asr":
         {
-          if (notificationModle.asr == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
+          if (notificationModel.asr == false)
+            return PlatformIconButton(
+              iosIcon: Icon(
+                CupertinoIcons.bell,
+              ),
+              androidIcon: Icon(Icons.notifications),
               onPressed: () {
-                notificationModle.asr = true;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.asr = true;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
               },
             );
           else
-            return IconButton(
-                icon: Icon(Icons.notifications_active),
+            return PlatformIconButton(
+                iosIcon: Icon(
+                  CupertinoIcons.bell_solid,
+                ),
+                androidIcon: Icon(Icons.notifications_active),
                 onPressed: () {
-                  notificationModle.asr = false;
+                  notificationModel.asr = false;
                   notificationBloc.add(
-                      SelectNotificationEvent(notificationModle));
+                      SelectNotificationEvent(notificationModel));
                 }
             );
         }
@@ -382,20 +408,26 @@ class _HomePageState extends State<HomePage> {
 
       case "magrib":
         {
-          if (notificationModle.magrib == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
+          if (notificationModel.magrib == false)
+            return PlatformIconButton(
+              iosIcon: Icon(
+                CupertinoIcons.bell,
+              ),
+              androidIcon: Icon(Icons.notifications),
               onPressed: () {
-                notificationModle.magrib = true;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.magrib = true;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
               },
             );
           else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
+            return PlatformIconButton(
+              iosIcon: Icon(
+                CupertinoIcons.bell_solid,
+              ),
+              androidIcon: Icon(Icons.notifications_active),
               onPressed: () {
-                notificationModle.magrib = false;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.magrib = false;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
               },
             );
         }
@@ -403,31 +435,35 @@ class _HomePageState extends State<HomePage> {
 
       case "esha":
         {
-          if (notificationModle.esha == false)
-            return IconButton(
-              icon: Icon(Icons.notifications),
+          if (notificationModel.esha == false)
+            return PlatformIconButton(
+              iosIcon: Icon(
+                CupertinoIcons.bell,
+              ),
+              androidIcon: Icon(Icons.notifications),
               onPressed: () {
-                notificationModle.esha = true;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.esha = true;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
               },
             );
           else
-            return IconButton(
-              icon: Icon(Icons.notifications_active),
+            return PlatformIconButton(
+              iosIcon: Icon(
+                CupertinoIcons.bell_solid,
+              ),
+              androidIcon: Icon(Icons.notifications_active),
               onPressed: () {
-                notificationModle.esha = false;
-                notificationBloc.add(SelectNotificationEvent(notificationModle));
+                notificationModel.esha = false;
+                notificationBloc.add(SelectNotificationEvent(notificationModel));
               },
             );
         }
         break;
-
       default:
-        {
-          //statements;
-        }
+        {}
         break;
     }
+    return null;
   }
 
   Widget buildBottomList(Timings item) {
@@ -515,11 +551,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 width: 4,
               ),
-              Icon(
-                Icons.refresh,
-                size: 18,
-                color: Color(0xFFd4a554),
-              ),
+              Icon(context.platformIcons.refresh,size: 18.0,color: Color(0xFFd4a554),)
             ])),
       ],
     );

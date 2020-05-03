@@ -1,10 +1,10 @@
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_save/bloc/bloc.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_save/models/Options.dart';
 import 'package:flutter_save/repository/options_repository.dart';
-import 'package:flutter_save/screens/home_page.dart';
 
 class ParentSettingsPage extends StatelessWidget {
   @override
@@ -31,10 +31,8 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   int selectedRadio;
   OptionsBloc optionsBloc;
-  PrayerBloc prayerBloc;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     selectedRadio=4;
     optionsBloc = BlocProvider.of<OptionsBloc>(context);
@@ -44,12 +42,12 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text('Settings'),
+        ),
         body: Container(
             child: BlocListener<OptionsBloc, OptionsState>(
-                listener: (context, state) {
-
-                },
+                listener: (context, state) {},
                 child: BlocBuilder<OptionsBloc, OptionsState>(
                   builder: (context, state) {
                     if (state is InitialOptionsState) {
@@ -59,30 +57,27 @@ class _SettingsPageState extends State<SettingsPage> {
                       print(state.options.selectedMethod);
                       return BuildList(options: state.options);
                     }
+                    return null;
                   },
                 )
             )));
   }
 
-
   Widget buildLoading() {
     return Center(
-      child: CircularProgressIndicator(),
+      child: PlatformCircularProgressIndicator(),
     );
   }
 }
 
 class BuildList extends StatefulWidget {
-
-  Options options;
+  final Options options;
   BuildList({this.options});
   @override
-  BuildList_State createState() => BuildList_State();
+  _BuildListState createState() => _BuildListState();
 }
 
-class BuildList_State extends State<BuildList> {
-
-
+class _BuildListState extends State<BuildList> {
   OptionsBloc optionsBloc;
   int selectedRadio;
   setSelectedRadio(int val){
@@ -91,7 +86,7 @@ class BuildList_State extends State<BuildList> {
     });
   }
 
-  setSelectecMethod(){
+  setSelectedMethod(){
     setState(() {
       selectedRadio = widget.options.selectedMethod;
     });
@@ -101,15 +96,13 @@ class BuildList_State extends State<BuildList> {
   void initState() {
     super.initState();
     optionsBloc = BlocProvider.of<OptionsBloc>(context);
-    setSelectecMethod();
+    setSelectedMethod();
     print("init $selectedRadio");
     print(widget.options.selectedMethod);
   }
 
   @override
   Widget build(BuildContext context) {
-    //save.selectedMethod = selectedRadio;
-    //print(selectedRadio);
     return ListView(
       children: <Widget>[
         Column(
@@ -278,16 +271,15 @@ class BuildList_State extends State<BuildList> {
                       print(val);
                       setSelectedRadio(val);
                     }),
-                FloatingActionButton(
+                PlatformButton(
                   child: Text('Save'),
                   onPressed: (){
                     Options save = Options(selectedRadio);
                     optionsBloc.add(SaveOptionsEvent(save));
+                    // ignore: close_sinks
                     PrayerBloc prayerBloc = BlocProvider.of<PrayerBloc>(context);
                     prayerBloc.add(FetchPrayerMethodEvent(method: selectedRadio));
-//                    Navigator.pop(context);
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => HomePage()));
+                    Navigator.pop(context);
                   },
                 )
               ],

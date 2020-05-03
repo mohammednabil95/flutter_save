@@ -1,13 +1,9 @@
-
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_save/models/AthanTimes.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:flutter_save/models/Options.dart';
 import 'dart:convert';
-
 import 'package:flutter_save/utilities/file_util.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class PrayerRepository {
@@ -16,11 +12,9 @@ abstract class PrayerRepository {
 }
 
 class PrayerRepositoryImpl implements PrayerRepository {
-
   String fileName = 'prayerdata.json';
   @override
   Future<Timings> getItem({int method}) async {
-
     DateTime today = DateTime.now();
     int day = today.day;
     int month = today.month;
@@ -62,14 +56,11 @@ class PrayerRepositoryImpl implements PrayerRepository {
         }
       }
       Timings timings = item[arrayLocation].timings;
-
       return timings;
-
   }
 
   Future<http.Response> updatePrayerDataFileUsingAPI() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     Options method = Options(prefs.getInt('prayer_method')?? 4);
     print("************** Prayer method = $method");
     DateTime today = DateTime.now();
@@ -85,7 +76,6 @@ class PrayerRepositoryImpl implements PrayerRepository {
     Position position = await getGPSLocation();
     double lat = position.latitude;
     double long = position.longitude;
-
     String fullUrl = 'http://api.aladhan.com/v1/calendar?latitude=$lat&longitude=$long&method=$method&month=$month&year=$year'; // add &annual=true to ignore month and get full year.
     final response = await http.get(fullUrl);
     return response;
@@ -135,7 +125,6 @@ class PrayerRepositoryImpl implements PrayerRepository {
     double percent = timeRemaining.inMinutes / totalTime.inMinutes * 100;
     return new NextPrayer(prayerName, timeRemaining, percent);
   }
-
 }
 
 
