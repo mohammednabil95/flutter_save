@@ -1,10 +1,10 @@
 import 'package:flutter_save/bloc/bloc.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
-import 'package:flutter_save/screens/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_save/models/Options.dart';
 import 'package:flutter_save/repository/options_repository.dart';
+import 'package:flutter_save/screens/home_page.dart';
 
 class ParentSettingsPage extends StatelessWidget {
   @override
@@ -13,13 +13,13 @@ class ParentSettingsPage extends StatelessWidget {
         providers: [
           BlocProvider<OptionsBloc>(
             create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
-              ),
+          ),
           BlocProvider<PrayerBloc>(
             create: (BuildContext context) => PrayerBloc(repository: PrayerRepositoryImpl()),
           ),
         ],
         child: SettingsPage()
-              );
+    );
   }
 }
 
@@ -32,13 +32,11 @@ class _SettingsPageState extends State<SettingsPage> {
   int selectedRadio;
   OptionsBloc optionsBloc;
   PrayerBloc prayerBloc;
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    //selectedRadio = 0;
+    selectedRadio=4;
     optionsBloc = BlocProvider.of<OptionsBloc>(context);
     optionsBloc.add(FetchOptionsEvent());
   }
@@ -46,35 +44,24 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Container(
-          child: BlocListener<OptionsBloc, OptionsState>(
-              listener: (context, state) {},
-              child: BlocBuilder<OptionsBloc, OptionsState>(
-                builder: (context, state) {
-                  if (state is InitialOptionsState) {
-                    return buildLoading();
-                  } else if (state is OptionsLoadedState) {
-                    print("state");
-                    print(state.options.selectedMethod);
-                    return BuildList(options: state.options);
-                  }
+        appBar: AppBar(),
+        body: Container(
+            child: BlocListener<OptionsBloc, OptionsState>(
+                listener: (context, state) {
+
                 },
-              ))),
-      floatingActionButton: Container(
-        width: 150.0,
-        height: 70.0,
-        child: FloatingActionButton(onPressed: () {
-          Options save = Options(selectedRadio);
-          optionsBloc.add(SaveOptionsEvent(save));
-          prayerBloc = BlocProvider.of<PrayerBloc>(context);
-          prayerBloc.add(FetchPrayerMethodEvent(method: selectedRadio));
-          Navigator.pop(context);
-        },
-          child: Text('Save'),
-      ),
-      ),
-    );
+                child: BlocBuilder<OptionsBloc, OptionsState>(
+                  builder: (context, state) {
+                    if (state is InitialOptionsState) {
+                      return buildLoading();
+                    } else if (state is OptionsLoadedState) {
+                      print("state");
+                      print(state.options.selectedMethod);
+                      return BuildList(options: state.options);
+                    }
+                  },
+                )
+            )));
   }
 
 
@@ -292,11 +279,15 @@ class BuildList_State extends State<BuildList> {
                       setSelectedRadio(val);
                     }),
                 FloatingActionButton(
+                  child: Text('Save'),
                   onPressed: (){
                     Options save = Options(selectedRadio);
-
                     optionsBloc.add(SaveOptionsEvent(save));
-                    Navigator.pop(context);
+                    PrayerBloc prayerBloc = BlocProvider.of<PrayerBloc>(context);
+                    prayerBloc.add(FetchPrayerMethodEvent(method: selectedRadio));
+//                    Navigator.pop(context);
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => HomePage()));
                   },
                 )
               ],

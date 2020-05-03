@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_save/bloc/bloc.dart';
 import 'package:flutter_save/bloc/notification_bloc.dart';
 import 'package:flutter_save/bloc/prayer_bloc.dart';
+import 'package:flutter_save/repository/options_repository.dart';
 import 'package:flutter_save/screens/home_page.dart';
 import 'package:flutter_save/repository/notifications_repository.dart';
 import 'package:flutter_save/repository/prayer_repository.dart';
@@ -52,10 +53,9 @@ class MyApp extends StatelessWidget {
                 BlocProvider<TimerBloc>(
                   create: (BuildContext context)=>TimerBloc(ticker: Ticker()),
                 ),
-//
-//              BlocProvider<OptionsBloc>(
-//                create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
-//                ),
+              BlocProvider<OptionsBloc>(
+                create: (BuildContext context) => OptionsBloc(OptionsRepositoryImp()),
+                ),
               ],
               child: MainScreen(),
             ),

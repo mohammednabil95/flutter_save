@@ -34,6 +34,15 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
       } catch (e) {
         yield PrayerErrorState(message1: e.toString());
       }
+    }else if(event is RefreshPrayerEvent){
+      yield InitialPrayerState();
+      try {
+        Timings item = await repository.getItem();
+        NextPrayer nextPrayer = repository.getNextPrayer(item);
+        yield PrayerLoadedState(item: item, nextPrayer: nextPrayer);
+      } catch (e) {
+        yield PrayerErrorState(message1: e.toString());
+      }
     }
   }
 }

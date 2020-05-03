@@ -1,4 +1,4 @@
-import 'dart:async';
+
 import 'package:easy_localization/easy_localization_delegate.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
@@ -15,7 +15,6 @@ import 'package:flutter_save/bloc/notification_state.dart';
 import 'package:flutter_save/models/notification1.dart';
 import 'package:flutter_save/services/presentation/my_flutter_app_icons.dart';
 import 'package:hijri/umm_alqura_calendar.dart';
-import 'package:flutter_save/repository/prayer_repository.dart';
 import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,15 +33,13 @@ class _HomePageState extends State<HomePage> {
   int dateDay;
   int test;
   String minutesStr, secondsStr, hoursStr;
-
   TimerBloc timerBloc;
 
   @override
   void initState() {
-
-    notificationBloc = BlocProvider.of<NotificationBloc>(context);
     prayerBloc = BlocProvider.of<PrayerBloc>(context);
     prayerBloc.add(FetchPrayerEvent());
+    notificationBloc = BlocProvider.of<NotificationBloc>(context);
     notificationBloc.add(FetchNotificationEvent());
     dateDay = now.day;
     dateFormat = DateFormat('dd/MM/yyyy').format(now);
@@ -75,15 +72,13 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.max,
-
                               children: <Widget>[
                                 Center(
                                   child: BlocBuilder<PrayerBloc, PrayerState>(
                                     builder: (context, state) {
                                       if (state is InitialPrayerState) {
                                         return buildLoading();
-                                      } else if (state
-                                      is PrayerLoadedState) {
+                                      } else if (state is PrayerLoadedState) {
                                         timerBloc = BlocProvider.of<TimerBloc>(context);
                                         timerBloc.add(Start(duration: state.nextPrayer.duration.inSeconds));
                                         return buildArticleList(state.item);
@@ -99,14 +94,11 @@ class _HomePageState extends State<HomePage> {
                                     if (state is InitialNotificationState) {
                                       return buildLoading();
                                     } else if (state is NotificationLoadedState) {
-                                      return NotificationIconBuild(
-                                          state.notification);
+                                      return NotificationIconBuild(state.notification);
                                     } else if (state is NotificationErrorState) {
                                       return buildErrorUi(state.message1);
-                                    }
-                                    else if (state is NotificationSavedState) {
-                                      return NotificationIconBuild(
-                                          state.notification);
+                                    } else if (state is NotificationSavedState) {
+                                      return NotificationIconBuild(state.notification);
                                     }
                                   },
                                 ),
@@ -120,8 +112,9 @@ class _HomePageState extends State<HomePage> {
                             if (state is PrayerLoadedState) {
                               return buildprogress(state.nextPrayer);
                             }
-                            else
+                            else {
                               return Container();
+                            }
                           })
                     ],
                   ),
@@ -270,7 +263,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
 
   Widget buildLoading() {
     return Center(
@@ -505,7 +497,7 @@ class _HomePageState extends State<HomePage> {
         ),
         RaisedButton(
             onPressed: () {
-              //refreshLocation
+              prayerBloc.add(RefreshPrayerEvent(item));
             },
             shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
