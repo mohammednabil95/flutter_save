@@ -557,11 +557,9 @@ class EnumValues<T> {
   }
 }
 
-
 class NextPrayer {
   String prayerName;
   Duration duration;
   double percent;
-
   NextPrayer(this.prayerName, this.duration, this.percent);
 }

@@ -484,8 +484,7 @@ class _HomePageState extends State<HomePage> {
                   height: 4,
                 ),
 //                Text(
-//                  trimToCityOnly(
-//                      snapshot.data.meta.timezone),
+//                  trimToCityOnly(item.timezone.toString()),
 //                  style: TextStyle(
 //                      fontSize: 12, color: Colors.white),
 //                ),
@@ -584,6 +583,14 @@ class _HomePageState extends State<HomePage> {
     time12hour.add(noon);
     time12hour.add(noonAr);
     return time12hour;
+  }
+
+  String trimToCityOnly(String timezone){
+    if(timezone.contains('/')){
+      return timezone.substring(timezone.indexOf('/')+1);
+    }else{
+      return timezone;
+    }
   }
 }
 

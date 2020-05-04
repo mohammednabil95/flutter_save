@@ -105,7 +105,7 @@ class _BuildListState extends State<BuildList> {
   }
 
   void _showSnackBar() {
-    final snackBar=new SnackBar(content: new Text('Please enable the location'));
+    final snackBar=new SnackBar(content: new Text('Please enable the location on your device'));
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 

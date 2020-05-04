@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_save/models/AthanTimes.dart';
 
@@ -30,16 +29,15 @@ class PrayerBloc extends Bloc<PrayerEvent, PrayerState> {
       try {
         Timings item = await repository.getItem(method: event.method);
         NextPrayer nextPrayer = repository.getNextPrayer(item);
-        //yield InitialPrayerState();
         yield PrayerLoadedState(item: item, nextPrayer: nextPrayer);
       } catch (e) {
         yield PrayerErrorState(message1: e.toString());
       }
     }else if(event is RefreshPrayerEvent){
+      yield InitialPrayerState();
       try {
         Timings item = await repository.getItem();
         NextPrayer nextPrayer = repository.getNextPrayer(item);
-        yield InitialPrayerState();
         yield PrayerLoadedState(item: item, nextPrayer: nextPrayer);
       } catch (e) {
         yield PrayerErrorState(message1: e.toString());
