@@ -14,8 +14,10 @@ import 'package:flutter_save/bloc/notification_bloc.dart';
 import 'package:flutter_save/bloc/notification_state.dart';
 import 'package:flutter_save/models/notification1.dart';
 import 'package:flutter_save/services/presentation/my_flutter_app_icons.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:hijri/umm_alqura_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -34,6 +36,33 @@ class _HomePageState extends State<HomePage> {
   int test;
   String minutesStr, secondsStr, hoursStr;
   TimerBloc timerBloc;
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  String _currentAddress;
+  var location = Location();
+  LocationData _locationData;
+
+  Future openLocationSetting() async {
+    if(!await location.serviceEnabled()){
+      location.requestService();
+    }
+  }
+
+  Future getCurrentLocation() async{
+    _locationData=await location.getLocation();
+    _getAddressFromLatLng();
+  }
+
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(_locationData.latitude, _locationData.longitude);
+      Placemark place = p[0];
+      setState(() {
+        _currentAddress = place.locality;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   void initState() {
@@ -44,6 +73,8 @@ class _HomePageState extends State<HomePage> {
     dateDay = now.day;
     dateFormat = DateFormat('dd/MM/yyyy').format(now);
     super.initState();
+    openLocationSetting();
+    getCurrentLocation();
   }
 
   @override
@@ -137,31 +168,56 @@ class _HomePageState extends State<HomePage> {
             elevation: 20,
             shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: BlocListener<PrayerBloc, PrayerState>(
-                listener: (context, state) {
-                  if (state is PrayerErrorState) {
-                    Scaffold.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(state.message1),
-                      ),
-                    );
-                  }
-                },
-                child: BlocBuilder<PrayerBloc, PrayerState>(
-                  builder: (context, state) {
-                    if (state is InitialPrayerState) {
-                      return buildLoading();
-                    } else if (state is PrayerLoadedState) {
-                      return buildBottomList(state.item);
-                    } else if (state is PrayerErrorState) {
-                      return buildErrorUi(state.message1);
-                    }
-                    return null;
-                  },
+            child: Row(
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      AppLocalizations.of(context).tr("Location:"),
+                      style: TextStyle(fontSize: 10, color: Colors.grey),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    if (_currentAddress != null) Text(_currentAddress,style: TextStyle(color: Colors.white,fontSize: 12.0),),
+                  ],
                 ),
-              ),
+                Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: BlocListener<PrayerBloc, PrayerState>(
+                            listener: (context, state) {
+                              if (state is PrayerErrorState) {
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(state.message1),
+                                  ),
+                                );
+                              }
+                            },
+                            child: BlocBuilder<PrayerBloc, PrayerState>(
+                              builder: (context, state) {
+                                if (state is InitialPrayerState) {
+                                  return buildLoading();
+                                } else if (state is PrayerLoadedState) {
+                                  return buildBottomList(state.item);
+                                } else if (state is PrayerErrorState) {
+                                  return buildErrorUi(state.message1);
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
             ),
           ),
         ),
@@ -329,10 +385,10 @@ class _HomePageState extends State<HomePage> {
         {
           if (notificationModel.fajr == false)
             return PlatformIconButton(
-                iosIcon: Icon(
-                  CupertinoIcons.bell,
-                ),
-                androidIcon: Icon(Icons.notifications),
+              iosIcon: Icon(
+                CupertinoIcons.bell,
+              ),
+              androidIcon: Icon(Icons.notifications),
               onPressed: () {
                 notificationModel.fajr = true;
                 notificationBloc.add(SelectNotificationEvent(notificationModel));
@@ -472,27 +528,6 @@ class _HomePageState extends State<HomePage> {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
         Row(
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  AppLocalizations.of(context).tr("Location:"),
-                  style: TextStyle(fontSize: 10, color: Colors.grey),
-                ),
-                SizedBox(
-                  height: 4,
-                ),
-//                Text(
-//                  trimToCityOnly(item.timezone.toString()),
-//                  style: TextStyle(
-//                      fontSize: 12, color: Colors.white),
-//                ),
-              ],
-            ),
-          ],
-        ),
-        Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Column(
@@ -531,8 +566,12 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         RaisedButton(
-            onPressed: () {
-              prayerBloc.add(RefreshPrayerEvent(item));
+            onPressed: () async {
+              if(!await location.serviceEnabled()){
+              location.requestService();
+              }else {
+                prayerBloc.add(RefreshPrayerEvent(item));
+              }
             },
             shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),

@@ -31,7 +31,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         await notificationsRepository.saveNotifications(event.notificationModle);
         NotificationModel notification = await notificationsRepository.getNotifications();
         yield NotificationLoadedState(notification: notification);
-        //yield NotificationSavedState(notification: event.notificationModle);
       }
       catch (e){
         yield NotificationErrorState(message1: e.toString());

@@ -25,7 +25,7 @@ class PrayerRepositoryImpl implements PrayerRepository {
     var data;
     var resp;
     List<Datum> item;
-    if(rawData == null || method != null){
+    if(rawData == null || method != null||item==null){
       resp = await updatePrayerDataFileUsingAPI();
       rawData = resp.body;
       if (resp.statusCode == 200) {

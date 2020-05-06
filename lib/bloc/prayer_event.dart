@@ -12,7 +12,7 @@ class RefreshPrayerEvent extends PrayerEvent {
   Timings items;
   RefreshPrayerEvent(this.items);
   @override
-  List<Object> get props => null;
+  List<Object> get props => [items];
 }
 
 class FetchPrayerMethodEvent extends PrayerEvent {

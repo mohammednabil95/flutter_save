@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_save/models/Options.dart';
 import 'package:flutter_save/repository/options_repository.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 
 class ParentSettingsPage extends StatelessWidget {
   @override
@@ -79,10 +79,10 @@ class BuildList extends StatefulWidget {
 }
 
 class _BuildListState extends State<BuildList> {
-  final GlobalKey<ScaffoldState> _scaffoldKey=new GlobalKey<ScaffoldState>();
-  bool isLocationEnabled=true;
   OptionsBloc optionsBloc;
   int selectedRadio;
+  var location = Location();
+
   setSelectedRadio(int val){
     setState(() {
       selectedRadio = val;
@@ -104,15 +104,9 @@ class _BuildListState extends State<BuildList> {
     print(widget.options.selectedMethod);
   }
 
-  void _showSnackBar() {
-    final snackBar=new SnackBar(content: new Text('Please enable the location on your device'));
-    _scaffoldKey.currentState.showSnackBar(snackBar);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
       body: ListView(
         children: <Widget>[
           Column(
@@ -284,18 +278,15 @@ class _BuildListState extends State<BuildList> {
                   PlatformButton(
                     child: Text('Save'),
                     onPressed: () async {
-                      isLocationEnabled = await Geolocator().isLocationServiceEnabled();
-                      if(isLocationEnabled==true){
-                        print('yes');
+                      if(!await location.serviceEnabled()){
+                        location.requestService();
+                      }else{
                         Options save = Options(selectedRadio);
                         optionsBloc.add(SaveOptionsEvent(save));
                         // ignore: close_sinks
                         PrayerBloc prayerBloc = BlocProvider.of<PrayerBloc>(context);
                         prayerBloc.add(FetchPrayerMethodEvent(method: selectedRadio));
                         Navigator.pop(context);
-                      }else{
-                        print('no');
-                        _showSnackBar();
                       }
                     },
                   )
